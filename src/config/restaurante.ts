@@ -36,11 +36,11 @@ export type ConfigRestaurante = {
 // VERIFICAR: todos los valores son provisionales hasta tener los datos reales.
 export const restaurante: ConfigRestaurante = {
   demo: true,
-  nombre: '[NOMBRE]',
+  nombre: 'Sabroso Perú',
   whatsapp: '34600000000',
   telefono: '+34 600 000 000',
   email: 'info@ejemplo.invalid',
-  direccion: '[Dirección pendiente de confirmar]',
+  direccion: 'Calle de Ejemplo 1, Madrid (dirección ficticia)',
   titular: {
     razonSocial: '[Razón social pendiente]',
     nif: '[NIF pendiente]',

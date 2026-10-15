@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { restaurante } from '../src/config/restaurante';
 import AxeBuilder from '@axe-core/playwright';
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
@@ -63,7 +64,7 @@ test.describe('navegacion', () => {
       await page.goto(ruta);
       const cabecera = page.locator('header');
       await expect(cabecera).toBeVisible();
-      await expect(cabecera.getByRole('link', { name: '[NOMBRE]' })).toHaveAttribute('href', '/');
+      await expect(cabecera.getByRole('link', { name: restaurante.nombre })).toHaveAttribute('href', '/');
 
       const nav = cabecera.getByRole('navigation', { name: 'Principal' });
       const hrefs = await nav.getByRole('link').evaluateAll((as) => as.map((a) => a.getAttribute('href') ?? ''));
@@ -76,7 +77,7 @@ test.describe('navegacion', () => {
 
   test('pulsar el logo desde otra página lleva a la portada', async ({ page }) => {
     await page.goto('/contacto');
-    await page.locator('header').getByRole('link', { name: '[NOMBRE]' }).click();
+    await page.locator('header').getByRole('link', { name: restaurante.nombre }).click();
     await expect(page).toHaveURL(/\/$/);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Perú en la mesa');
   });

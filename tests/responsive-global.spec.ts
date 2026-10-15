@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { restaurante } from '../src/config/restaurante';
 import AxeBuilder from '@axe-core/playwright';
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
@@ -125,6 +126,6 @@ test.describe('CA-09 recorrido responsive', () => {
     const resultados = await new AxeBuilder({ page }).withTags(TAGS).analyze();
     const graves = resultados.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
     expect(graves, JSON.stringify(graves.map((v) => v.id))).toEqual([]);
-    await expect(page.locator('header').getByRole('link', { name: '[NOMBRE]' })).toHaveAttribute('href', '/');
+    await expect(page.locator('header').getByRole('link', { name: restaurante.nombre })).toHaveAttribute('href', '/');
   });
 });

@@ -15,7 +15,7 @@ test.describe('pie-legal', () => {
       await page.goto(ruta);
       const pie = page.locator('footer');
       await expect(pie).toBeVisible();
-      await expect(pie.locator('address')).toContainText('Dirección');
+      await expect(pie.locator('address')).toContainText('Calle de Ejemplo');
       await expect(pie.getByRole('link', { name: '+34 600 000 000' })).toHaveAttribute('href', 'tel:+34600000000');
       await expect(pie.getByText('Martes a jueves:')).toBeVisible();
       await expect(pie.getByText('Lunes:')).toBeVisible();
