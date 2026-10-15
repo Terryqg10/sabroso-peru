@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@import "../../design/styles/v3-editorial-dark/tokens.css";
+@import "../../palette.css";
+
+/* Estilo del proyecto: v3-editorial-dark@0.1.0 (ver sdd/plans/PLAN-001-sitio-restaurante.md).
+   Los componentes consumen solo nombres de token. */
+
+@utility px-gutter {
+  padding-inline: var(--layout-gutter);
+}
+
+@utility max-w-prose-token {
+  max-width: var(--layout-prose-max);
+}
+
+@utility min-h-nav {
+  min-height: var(--nav-height);
+}
+
+@utility min-h-hero {
+  min-height: calc(var(--hero-height) - var(--nav-height));
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-accent-text);
+    outline-offset: 2px;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}

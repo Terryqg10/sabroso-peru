@@ -1,0 +1,23 @@
+/* source: sector   (hostelería; cocina peruana, ají amarillo)
+   mode: oscuro
+   seed: #e0a21b
+   rationale: ají amarillo, base de la cocina peruana. Cálido, no colisiona con danger ni success. Semilla ajustada a L≈0.72 para v3-editorial-dark.
+   approved_by: user
+   generated: 2026-10-12
+   check: check-palette OK (14 tokens, 20 pares) */
+@theme static {
+  --color-bg: #120f0b;
+  --color-surface: #1a1611;
+  --color-surface-muted: #231e17;
+  --color-border: #342d23;
+  --color-border-strong: #8c8070;
+  --color-fg: #f5f0e8;
+  --color-fg-muted: #bdb3a3;
+  --color-accent: #d99a1a;
+  --color-accent-hover: #e6ab2e;
+  --color-accent-fg: #1a1006;
+  --color-accent-soft: #3a2a10;
+  --color-accent-text: #f0b94a;
+  --color-danger: #f08a80;
+  --color-success: #86d29b;
+}
