@@ -2,6 +2,8 @@
 
 Sitio web de un restaurante peruano: presenta la cultura gastronómica, muestra una carta interactiva y permite reservar mesa desde el móvil o el ordenador, sin cuentas ni base de datos.
 
+**Demo en vivo:** <https://sabroso-peru.vercel.app> · **Código:** <https://github.com/Terryqg10/sabroso-peru>
+
 > **Proyecto de demostración.** El restaurante, los datos de contacto, los horarios y los textos son ficticios. El sitio muestra un aviso en todas las páginas y se publica con `noindex`.
 
 ![Portada en escritorio](docs/capturas/01-inicio-escritorio.png)
