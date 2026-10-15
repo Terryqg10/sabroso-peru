@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { abrirMenuSiHaceFalta } from './helpers';
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const CATEGORIAS = ['Ceviches', 'Tiraditos', 'Causas', 'Tradicionales', 'Postres'];
@@ -42,8 +43,10 @@ test.describe('carta', () => {
 
   test('la carta se puede alcanzar desde la cabecera y el pie', async ({ page }) => {
     await page.goto('/');
+    await abrirMenuSiHaceFalta(page);
     await page.locator('header').getByRole('link', { name: 'Carta' }).click();
     await expect(page).toHaveURL(/\/carta$/);
+    await abrirMenuSiHaceFalta(page);
     await expect(page.locator('header').getByRole('link', { name: 'Carta' })).toHaveAttribute('aria-current', 'page');
     await expect(page.locator('footer').getByRole('link', { name: 'Carta' })).toHaveAttribute('href', '/carta');
   });

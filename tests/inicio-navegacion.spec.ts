@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { restaurante } from '../src/config/restaurante';
 import AxeBuilder from '@axe-core/playwright';
+import { abrirMenuSiHaceFalta } from './helpers';
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const RUTAS = ['/', '/carta', '/para-llevar', '/reservas', '/contacto', '/aviso-legal', '/privacidad', '/accesibilidad'];
@@ -66,9 +67,11 @@ test.describe('navegacion', () => {
       await expect(cabecera).toBeVisible();
       await expect(cabecera.getByRole('link', { name: restaurante.nombre })).toHaveAttribute('href', '/');
 
-      const nav = cabecera.getByRole('navigation', { name: 'Principal' });
-      const hrefs = await nav.getByRole('link').evaluateAll((as) => as.map((a) => a.getAttribute('href') ?? ''));
-      expect(hrefs).toEqual(['/carta', '/para-llevar', '/contacto', '/reservas']);
+      await abrirMenuSiHaceFalta(page);
+      const hrefs = await cabecera
+        .getByRole('link')
+        .evaluateAll((as) => as.map((a) => a.getAttribute('href') ?? ''));
+      expect([...hrefs].sort()).toEqual(['/', '/carta', '/contacto', '/para-llevar', '/reservas']);
       for (const href of hrefs) {
         expect((await request.get(href)).status(), href).toBe(200);
       }
@@ -84,16 +87,19 @@ test.describe('navegacion', () => {
 
   test('los enlaces de la cabecera llevan a su página y marcan la actual', async ({ page }) => {
     await page.goto('/');
-    const nav = page.locator('header').getByRole('navigation', { name: 'Principal' });
-    await nav.getByRole('link', { name: 'Contacto' }).click();
+    const cabecera = page.locator('header');
+    await abrirMenuSiHaceFalta(page);
+    await cabecera.getByRole('link', { name: 'Contacto' }).click();
     await expect(page).toHaveURL(/\/contacto$/);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ven a vernos');
-    await expect(nav.getByRole('link', { name: 'Contacto' })).toHaveAttribute('aria-current', 'page');
-    await expect(nav.getByRole('link', { name: 'Reservas' })).not.toHaveAttribute('aria-current', 'page');
+    await abrirMenuSiHaceFalta(page);
+    await expect(cabecera.getByRole('link', { name: 'Contacto' })).toHaveAttribute('aria-current', 'page');
+    await expect(cabecera.getByRole('link', { name: 'Reservas' })).not.toHaveAttribute('aria-current', 'page');
 
-    await nav.getByRole('link', { name: 'Reservas' }).click();
+    await cabecera.getByRole('link', { name: 'Reservas' }).click();
     await expect(page).toHaveURL(/\/reservas$/);
-    await expect(nav.getByRole('link', { name: 'Reservas' })).toHaveAttribute('aria-current', 'page');
+    await abrirMenuSiHaceFalta(page);
+    await expect(cabecera.getByRole('link', { name: 'Reservas' })).toHaveAttribute('aria-current', 'page');
   });
 
   test('hay un enlace para saltar al contenido que se muestra al recibir el foco', async ({ page }) => {
@@ -106,19 +112,92 @@ test.describe('navegacion', () => {
     await expect(page.locator('#contenido')).toHaveCount(1);
   });
 
-  test('los controles de la cabecera miden al menos 44 px y no hay scroll horizontal a 320 px', async ({ page }) => {
+  test('a 320 px la cabecera cabe en una fila, sus controles miden al menos 44 px y no hay scroll horizontal', async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 320, height: 800 });
     await page.goto('/');
-    const enlaces = page.locator('header a');
-    const total = await enlaces.count();
+    const controles = page.locator('header a, header button');
+    const total = await controles.count();
     expect(total).toBeGreaterThan(0);
     for (let i = 0; i < total; i++) {
-      const caja = await enlaces.nth(i).boundingBox();
-      if (caja) expect(caja.height, `enlace ${i}`).toBeGreaterThanOrEqual(44);
+      if (!(await controles.nth(i).isVisible())) continue;
+      const caja = await controles.nth(i).boundingBox();
+      if (caja) {
+        expect(caja.height, `control ${i} (alto)`).toBeGreaterThanOrEqual(44);
+        expect(caja.width, `control ${i} (ancho)`).toBeGreaterThanOrEqual(44);
+      }
     }
+    const alto = await page.locator('header').evaluate((el) => el.getBoundingClientRect().height);
+    expect(alto, 'la cabecera cerrada ocupa una sola fila').toBeLessThanOrEqual(80);
     const desborda = await page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
     );
     expect(desborda).toBe(false);
+  });
+});
+
+test.describe('menú de la cabecera', () => {
+  test('en pantallas estrechas: Reservas siempre a la vista y el resto tras el botón Menú', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto('/');
+    const cabecera = page.locator('header');
+    const boton = cabecera.getByRole('button', { name: 'Menú' });
+    await expect(boton).toBeVisible();
+    await expect(boton).toHaveAttribute('aria-expanded', 'false');
+    await expect(boton).toHaveAttribute('aria-controls', 'menu-movil');
+    await expect(cabecera.getByRole('link', { name: 'Reservas' })).toBeVisible();
+    await expect(cabecera.getByRole('link', { name: 'Carta' })).toBeHidden();
+    await expect(page.locator('#menu-movil')).toBeHidden();
+
+    await boton.click();
+    await expect(boton).toHaveAttribute('aria-expanded', 'true');
+    await expect(page.locator('#menu-movil')).toBeVisible();
+    for (const texto of ['Carta', 'Para llevar', 'Contacto']) {
+      await expect(cabecera.getByRole('link', { name: texto })).toBeVisible();
+    }
+    await boton.click();
+    await expect(boton).toHaveAttribute('aria-expanded', 'false');
+    await expect(page.locator('#menu-movil')).toBeHidden();
+  });
+
+  test('Esc cierra el menú y devuelve el foco al botón', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto('/');
+    const boton = page.locator('header').getByRole('button', { name: 'Menú' });
+    await boton.click();
+    await expect(page.locator('#menu-movil')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#menu-movil')).toBeHidden();
+    await expect(boton).toBeFocused();
+  });
+
+  test('un clic fuera cierra el menú', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto('/');
+    await page.locator('header').getByRole('button', { name: 'Menú' }).click();
+    await expect(page.locator('#menu-movil')).toBeVisible();
+    await page.locator('main').click({ position: { x: 5, y: 5 } });
+    await expect(page.locator('#menu-movil')).toBeHidden();
+  });
+
+  test('al elegir un enlace navega y el menú se cierra', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto('/');
+    await page.locator('header').getByRole('button', { name: 'Menú' }).click();
+    await page.locator('header').getByRole('link', { name: 'Carta' }).click();
+    await expect(page).toHaveURL(/\/carta$/);
+    await expect(page.locator('#menu-movil')).toBeHidden();
+  });
+
+  test('en pantallas anchas no hay botón Menú y los enlaces van en línea', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 800 });
+    await page.goto('/');
+    const cabecera = page.locator('header');
+    await expect(cabecera.getByRole('button', { name: 'Menú' })).toBeHidden();
+    const nav = cabecera.getByRole('navigation', { name: 'Principal' });
+    await expect(nav.getByRole('link')).toHaveCount(4);
+    const alto = await cabecera.evaluate((el) => el.getBoundingClientRect().height);
+    expect(alto).toBeLessThanOrEqual(80);
   });
 });

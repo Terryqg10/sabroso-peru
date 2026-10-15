@@ -5,7 +5,7 @@ export function AvisoDemo() {
       data-testid="aviso-demo"
       className="bg-accent-soft px-gutter py-2 text-center text-label text-fg"
     >
-      Proyecto de demostración: el restaurante, los datos y los textos son ficticios.
+      Proyecto de demostración: todo es ficticio.
     </p>
   );
 }

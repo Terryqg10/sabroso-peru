@@ -21,7 +21,7 @@ const cultura = [
 ] as const;
 
 const claseBoton =
-  'inline-flex min-h-11 items-center justify-center px-6 text-label font-bold uppercase tracking-caps';
+  'inline-flex min-h-11 w-full items-center justify-center px-6 sm:w-auto text-label font-bold uppercase tracking-caps';
 
 export default function Inicio() {
   const horarios = resumenHorarios(restaurante.horarios);

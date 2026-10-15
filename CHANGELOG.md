@@ -21,6 +21,7 @@ y versionado [SemVer](https://semver.org/lang/es/).
 - SPEC-001, PLAN-001, ADR-001 e informes de competencia en research/.
 
 ### Cambiado
+- Cabecera responsive: en pantallas estrechas (< 768 px) pasa a una sola fila con el botón Reservas a la vista y un menú desplegable (Esc y clic fuera lo cierran); los botones del hero ocupan todo el ancho en móvil; la franja de demostración se acorta a una línea. Corrige un defecto que los tests de T-011 no detectaban: solo comprobaban que no hubiera scroll horizontal, no que la cabecera ocupara ~210 px de un móvil.
 - Desplegado en Vercel (https://sabroso-peru.vercel.app) desde la rama main; cada push a main redespliega.
 - La CI usa `pnpm run audit:ci` (scripts/check-audit.mjs): aplica la excepción de ADR-001 y falla si caduca el 2026-11-15 o si aparece otra vulnerabilidad alta o crítica. Se añade .node-version (24), que la CI necesitaba.
 - El proyecto usa los tokens de v3-editorial-dark (antes importaba v1-soft-commerce de la plantilla). La URL de WhatsApp y el teléfono del restaurante viven en src/config.

@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { abrirMenuSiHaceFalta } from './helpers';
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 
@@ -32,8 +33,10 @@ test.describe('para-llevar', () => {
 
   test('se llega desde la cabecera y el pie', async ({ page }) => {
     await page.goto('/');
+    await abrirMenuSiHaceFalta(page);
     await page.locator('header').getByRole('link', { name: 'Para llevar' }).click();
     await expect(page).toHaveURL(/\/para-llevar$/);
+    await abrirMenuSiHaceFalta(page);
     await expect(page.locator('header').getByRole('link', { name: 'Para llevar' })).toHaveAttribute(
       'aria-current',
       'page',

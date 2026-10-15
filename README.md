@@ -8,9 +8,9 @@ Sitio web de un restaurante peruano: presenta la cultura gastronómica, muestra 
 
 ![Portada en escritorio](docs/capturas/01-inicio-escritorio.png)
 
-| Portada (móvil) | Reserva (móvil) |
-|---|---|
-| ![Portada en móvil](docs/capturas/02-inicio-movil.png) | ![Formulario de reserva en móvil](docs/capturas/04-reserva-movil.png) |
+| Portada (móvil) | Menú (móvil) | Reserva (móvil) |
+|---|---|---|
+| ![Portada en móvil](docs/capturas/02-inicio-movil.png) | ![Menú desplegable en móvil](docs/capturas/06-menu-movil.png) | ![Formulario de reserva en móvil](docs/capturas/04-reserva-movil.png) |
 
 | Carta | Confirmación de reserva |
 |---|---|
@@ -23,6 +23,7 @@ Sitio web de un restaurante peruano: presenta la cultura gastronómica, muestra 
 - **Para llevar.** Explica cómo pedir por teléfono o WhatsApp, sin carrito ni pago.
 - **Información práctica.** Horarios agrupados por días, dirección, contacto, galería, reseñas (solo citas reales con fuente y fecha) y páginas de aviso legal, privacidad y accesibilidad.
 - **Accesible y rápido.** Cumple WCAG 2.1 AA como suelo, respeta `prefers-reduced-motion` y sale con 99–100 en Lighthouse.
+- **Pensado para el móvil.** Desde 320 px la cabecera cabe en una fila: el botón *Reservas* siempre a la vista y el resto de enlaces en un menú desplegable (cierra con Esc o con un clic fuera). En pantallas anchas los enlaces van en línea.
 
 ## Stack
 
