@@ -21,6 +21,7 @@ y versionado [SemVer](https://semver.org/lang/es/).
 - SPEC-001, PLAN-001, ADR-001 e informes de competencia en research/.
 
 ### Cambiado
+- La CI usa `pnpm run audit:ci` (scripts/check-audit.mjs): aplica la excepción de ADR-001 y falla si caduca el 2026-11-15 o si aparece otra vulnerabilidad alta o crítica. Se añade .node-version (24), que la CI necesitaba.
 - El proyecto usa los tokens de v3-editorial-dark (antes importaba v1-soft-commerce de la plantilla). La URL de WhatsApp y el teléfono del restaurante viven en src/config.
 - Normalización de teléfono: el prefijo por defecto pasa de 51 a 34 (T-002, ADR-002).
 - vitest 5.0.5, vite 8.3.4 y @vitejs/plugin-react 6.1.2 para resolver vulnerabilidades críticas y altas.

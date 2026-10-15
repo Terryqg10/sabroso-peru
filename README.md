@@ -72,7 +72,7 @@ Limitaciones conocidas, sin maquillar:
 
 - axe y Lighthouse solo detectan una parte de los problemas de accesibilidad. No hay revisión con lector de pantalla ni auditoría externa.
 - Los textos legales son un borrador pendiente de validación jurídica.
-- `pnpm audit --audit-level=high` falla por `braces`, una dependencia de desarrollo sin parche. Está cubierta por [ADR-001](sdd/adrs/ADR-001-excepcion-audit-braces.md) hasta el 2026-11-15.
+- `pnpm audit --audit-level=high` falla por `braces`, una dependencia de desarrollo sin parche. Está cubierta por [ADR-001](sdd/adrs/ADR-001-excepcion-audit-braces.md) hasta el 2026-11-15, y `pnpm run audit:ci` (el que usa la CI) aplica la excepción y falla solo cuando caduca.
 - Con `next dev` el servidor se cae durante los e2e en la máquina de desarrollo. Los e2e se ejecutan con el servidor de producción (`CI=true`).
 - El estilo visual está en borrador 0.1.0 y el hero no tiene fotografía porque no hay material real.
 
@@ -115,6 +115,7 @@ Todo lo ficticio está en [src/config/restaurante.ts](src/config/restaurante.ts)
 | `pnpm test:e2e` | Tests end-to-end (incluye axe). |
 | `pnpm check-palette` | Valida `palette.css` contra WCAG AA. |
 | `pnpm check-secrets` | gitleaks. |
+| `pnpm audit:ci` | `pnpm audit` con excepciones documentadas en un ADR y su caducidad. |
 | `pnpm verify` | Comprobaciones de estructura. |
 | `pnpm install-hooks` | Instala el hook pre-commit. |
 

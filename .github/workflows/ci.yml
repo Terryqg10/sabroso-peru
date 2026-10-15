@@ -44,7 +44,8 @@ jobs:
         run: pnpm run check-palette
 
       - name: Audit
-        run: pnpm audit --audit-level=high
+        # Excepciones con ADR y caducidad en scripts/check-audit.mjs (ADR-001, hasta 2026-11-15).
+        run: pnpm run audit:ci
 
       - name: Unit tests
         run: pnpm run test
