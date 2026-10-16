@@ -1,7 +1,12 @@
 import Image from 'next/image';
 import type { Imagen } from '@/content/galeria';
 
-/** Rejilla de fotos con dimensiones declaradas. Sin fotos, avisa de que se está preparando. */
+/** Una imagen es panorámica si su ancho supera al alto por un factor de 1.3. */
+function esPanoramica(imagen: Imagen): boolean {
+  return imagen.ancho / imagen.alto > 1.3;
+}
+
+/** Rejilla de fotos con dimensiones declaradas. La panorámica ocupa el ancho completo. */
 export function GaleriaFotos({ imagenes }: { imagenes: readonly Imagen[] }) {
   if (imagenes.length === 0) {
     return (
@@ -13,19 +18,25 @@ export function GaleriaFotos({ imagenes }: { imagenes: readonly Imagen[] }) {
 
   return (
     <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {imagenes.map((imagen, indice) => (
-        <li key={`${imagen.src}-${indice}`} className="border border-border bg-surface">
-          <Image
-            src={imagen.src}
-            alt={imagen.alt}
-            width={imagen.ancho}
-            height={imagen.alto}
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            loading={indice === 0 ? 'eager' : 'lazy'}
-            className="h-auto w-full"
-          />
-        </li>
-      ))}
+      {imagenes.map((imagen, indice) => {
+        const panoramica = esPanoramica(imagen);
+        return (
+          <li
+            key={`${imagen.src}-${indice}`}
+            className={`border border-border bg-surface${panoramica ? ' col-span-full' : ''}`}
+          >
+            <Image
+              src={imagen.src}
+              alt={imagen.alt}
+              width={imagen.ancho}
+              height={imagen.alto}
+              sizes={panoramica ? '100vw' : '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'}
+              loading={indice === 0 ? 'eager' : 'lazy'}
+              className="h-auto w-full"
+            />
+          </li>
+        );
+      })}
     </ul>
   );
 }
