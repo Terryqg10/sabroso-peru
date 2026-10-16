@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { abrirMenuSiHaceFalta } from './helpers';
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 
@@ -13,11 +14,29 @@ test.describe('galeria', () => {
     expect(sinAlt).toEqual([]);
   });
 
-  test('sin fotos cargadas avisa de que se está preparando y no enlaza la galería', async ({ page }) => {
+  test('la galería muestra las 5 imágenes', async ({ page }) => {
     await page.goto('/galeria');
-    await expect(page.getByRole('status')).toContainText('Estamos preparando la galería');
-    await expect(page.locator('header').getByRole('link', { name: 'Galería' })).toHaveCount(0);
-    await expect(page.locator('footer').getByRole('link', { name: 'Galería' })).toHaveCount(0);
+    const imagenes = page.locator('main img');
+    await expect(imagenes).toHaveCount(5);
+  });
+
+  test('todas las imágenes de la galería tienen alt descriptivo', async ({ page }) => {
+    await page.goto('/galeria');
+    const imagenes = page.locator('main img');
+    const count = await imagenes.count();
+    for (let i = 0; i < count; i++) {
+      const alt = await imagenes.nth(i).getAttribute('alt');
+      expect(alt, `imagen ${i} sin alt`).toBeTruthy();
+      expect((alt ?? '').length).toBeGreaterThan(10);
+    }
+  });
+
+  test('con fotos cargadas, Galería aparece en la cabecera y en el pie y ya no se avisa de que se prepara', async ({ page }) => {
+    await page.goto('/galeria');
+    await expect(page.getByRole('status')).toHaveCount(0);
+    await abrirMenuSiHaceFalta(page);
+    await expect(page.locator('header').getByRole('link', { name: 'Galería' })).toHaveAttribute('href', '/galeria');
+    await expect(page.locator('footer').getByRole('link', { name: 'Galería' })).toHaveAttribute('href', '/galeria');
   });
 
   test('accesibilidad: sin violaciones graves, texto >= 14 px y sin scroll horizontal', async ({ page }) => {

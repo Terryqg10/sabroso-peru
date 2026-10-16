@@ -2,8 +2,19 @@ import { describe, expect, it } from 'vitest';
 import { enlacesCabecera, enlacesPie } from '@/lib/navegacion';
 
 describe('navegación', () => {
-  it('la cabecera lista Carta, Para llevar, Contacto y Reservas; sin fotos no incluye Galería', () => {
-    expect(enlacesCabecera().map((e) => e.href)).toEqual(['/carta', '/para-llevar', '/contacto', '/reservas']);
+  it('la cabecera incluye Galería', () => {
+    const enlaces = enlacesCabecera();
+    expect(enlaces.some((e) => e.href === '/galeria')).toBe(true);
+  });
+
+  it('la cabecera lista Carta, Para llevar, Galería, Contacto y Reservas, en ese orden', () => {
+    expect(enlacesCabecera().map((e) => e.href)).toEqual([
+      '/carta',
+      '/para-llevar',
+      '/galeria',
+      '/contacto',
+      '/reservas',
+    ]);
   });
 
   it('Reservas es siempre el último enlace de la cabecera (CTA)', () => {

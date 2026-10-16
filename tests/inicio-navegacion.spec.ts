@@ -124,7 +124,7 @@ test.describe('navegacion', () => {
       const hrefs = await cabecera
         .getByRole('link')
         .evaluateAll((as) => as.map((a) => a.getAttribute('href') ?? ''));
-      expect([...hrefs].sort()).toEqual(['/', '/carta', '/contacto', '/para-llevar', '/reservas']);
+      expect([...hrefs].sort()).toEqual(['/', '/carta', '/contacto', '/galeria', '/para-llevar', '/reservas']);
       for (const href of hrefs) {
         expect((await request.get(href)).status(), href).toBe(200);
       }
@@ -249,7 +249,7 @@ test.describe('menú de la cabecera', () => {
     const cabecera = page.locator('header');
     await expect(cabecera.getByRole('button', { name: 'Menú' })).toBeHidden();
     const nav = cabecera.getByRole('navigation', { name: 'Principal' });
-    await expect(nav.getByRole('link')).toHaveCount(4);
+    await expect(nav.getByRole('link')).toHaveCount(5);
     const alto = await cabecera.evaluate((el) => el.getBoundingClientRect().height);
     expect(alto).toBeLessThanOrEqual(80);
   });
