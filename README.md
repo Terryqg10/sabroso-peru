@@ -1,5 +1,7 @@
 # Sabroso Perú
 
+<p align="center"><img src="docs/brand/logo-original.webp" alt="Logotipo de Sabroso Perú: montaña con sol sobre un cuenco humeante y el nombre en crema" width="360"></p>
+
 Sitio web de un restaurante peruano: presenta la cultura gastronómica, muestra una carta interactiva y permite reservar mesa desde el móvil o el ordenador, sin cuentas ni base de datos.
 
 **Demo en vivo:** <https://sabroso-peru.vercel.app> · **Código:** <https://github.com/Terryqg10/sabroso-peru>
@@ -86,7 +88,7 @@ pnpm install
 pnpm dev
 ```
 
-Abre <http://localhost:3000>.
+Abre <http://localhost:3200>. El proyecto usa el puerto **3200** (no el 3000) para no chocar con otros proyectos de desarrollo; los e2e lo cambian con `E2E_PORT`.
 
 Para ejecutar los tests e2e (con el servidor de producción):
 
@@ -121,6 +123,7 @@ Todo lo ficticio está en [src/config/restaurante.ts](src/config/restaurante.ts)
 | `pnpm audit:ci` | `pnpm audit` con excepciones documentadas en un ADR y su caducidad. |
 | `pnpm verify` | Comprobaciones de estructura. |
 | `pnpm install-hooks` | Instala el hook pre-commit. |
+| `pnpm build-logo` | Regenera los recursos de marca (emblema, favicon, imagen para compartir) a partir de `docs/brand/logo-original.webp`. |
 
 ## Cómo se trabaja
 

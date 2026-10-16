@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Resenas } from '@/components/Resenas';
 import { resenas } from '@/content/resenas';
@@ -66,6 +67,15 @@ export default function Inicio() {
           aria-labelledby="inicio-horarios"
           className="flex flex-col justify-center border-t border-border bg-surface px-gutter py-16 lg:border-l lg:border-t-0"
         >
+          <Image
+            src="/brand/logo-vertical.png"
+            alt={`${restaurante.nombre}, cocina peruana`}
+            width={768}
+            height={533}
+            priority
+            sizes="(min-width: 1024px) 256px, 224px"
+            className="mb-10 h-auto w-56 lg:w-64"
+          />
           <h2
             id="inicio-horarios"
             className="text-label font-bold uppercase tracking-caps text-fg"

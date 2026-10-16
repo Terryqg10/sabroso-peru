@@ -5,6 +5,11 @@
 /* Estilo del proyecto: v3-editorial-dark@0.1.0 (ver sdd/plans/PLAN-001-sitio-restaurante.md).
    Los componentes consumen solo nombres de token. */
 
+/* Punto de corte propio para móviles anchos (380 px): ahí la cabecera añade el nombre junto al emblema. */
+@theme {
+  --breakpoint-xs: 23.75rem;
+}
+
 @utility px-gutter {
   padding-inline: var(--layout-gutter);
 }

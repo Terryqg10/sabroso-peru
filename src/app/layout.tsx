@@ -9,6 +9,7 @@ import './globals.css';
 const geist = Geist({ subsets: ['latin'], variable: '--font-brand' });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://sabroso-peru.vercel.app'),
   title: { default: restaurante.nombre, template: `%s | ${restaurante.nombre}` },
   description: 'Restaurante peruano: carta, reservas y cultura gastronómica.',
   robots: restaurante.demo ? { index: false, follow: false } : undefined,

@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const PORT = 3000;
+// Puerto propio de los e2e (3200) para no chocar con otros proyectos que usen el 3000. Se cambia con E2E_PORT.
+const PORT = Number(process.env.E2E_PORT ?? 3200);
 const BASE_URL = `http://localhost:${PORT}`;
 const isCI = !!process.env.CI;
 
@@ -31,7 +32,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: isCI ? 'pnpm run start' : 'pnpm run dev',
+    command: isCI ? `pnpm run start -p ${PORT}` : `pnpm run dev -p ${PORT}`,
     url: BASE_URL,
     reuseExistingServer: !isCI,
     timeout: 120_000,
