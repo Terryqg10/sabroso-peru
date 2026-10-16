@@ -243,6 +243,22 @@ test.describe('menú de la cabecera', () => {
     await expect(page.locator('#menu-movil')).toBeHidden();
   });
 
+  test('la cabecera cabe en una fila entre 320 y 1440 px, con menú hasta 1023 px y enlaces en línea desde 1024', async ({ page }) => {
+    for (const ancho of [320, 375, 600, 768, 800, 900, 1023, 1024, 1280, 1440]) {
+      await page.setViewportSize({ width: ancho, height: 800 });
+      await page.goto('/');
+      const cabecera = page.locator('header');
+      const alto = await cabecera.evaluate((el) => el.getBoundingClientRect().height);
+      expect(alto, `@${ancho}: la cabecera cerrada ocupa una sola fila`).toBeLessThanOrEqual(80);
+      const hayMenu = await cabecera.getByRole('button', { name: 'Menú' }).isVisible();
+      expect(hayMenu, `@${ancho}: botón Menú ${ancho < 1024 ? 'visible' : 'oculto'}`).toBe(ancho < 1024);
+      const desborda = await page.evaluate(
+        () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      );
+      expect(desborda, `@${ancho}: sin scroll horizontal`).toBe(false);
+    }
+  });
+
   test('en pantallas anchas no hay botón Menú y los enlaces van en línea', async ({ page }) => {
     await page.setViewportSize({ width: 1024, height: 800 });
     await page.goto('/');

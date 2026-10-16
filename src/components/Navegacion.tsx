@@ -13,8 +13,8 @@ const claseMenu =
 const claseCta = `${claseBase} bg-accent text-accent-fg hover:bg-accent-hover`;
 
 /**
- * Navegación de la cabecera. En pantallas anchas (md, 768 px) los enlaces van en línea; en las
- * estrechas, "Reservas" queda siempre a la vista y el resto se abre con el botón "Menú".
+ * Navegación de la cabecera. En pantallas anchas (lg, 1024 px) los enlaces van en línea; en las
+ * estrechas (incluida una tableta en vertical), "Reservas" queda siempre a la vista y el resto se abre con el botón "Menú".
  * La lista se define en `src/lib/navegacion.ts`.
  */
 export function Navegacion({ enlaces }: { enlaces: readonly EnlaceNav[] }) {
@@ -64,7 +64,7 @@ export function Navegacion({ enlaces }: { enlaces: readonly EnlaceNav[] }) {
   return (
     <>
       {/* Pantallas anchas: todos los enlaces en línea. */}
-      <nav aria-label="Principal" className="hidden md:block">
+      <nav aria-label="Principal" className="hidden lg:block">
         <ul className="-mr-3 flex items-center gap-x-1">
           {enlaces.map((e) => (
             <li key={e.href}>
@@ -77,7 +77,7 @@ export function Navegacion({ enlaces }: { enlaces: readonly EnlaceNav[] }) {
       </nav>
 
       {/* Pantallas estrechas: CTA a la vista y botón de menú. */}
-      <div className="ml-auto flex items-center gap-2 md:hidden">
+      <div className="ml-auto flex items-center gap-2 lg:hidden">
         {reserva && enlace(reserva, claseCta)}
         <button
           ref={boton}
@@ -97,7 +97,7 @@ export function Navegacion({ enlaces }: { enlaces: readonly EnlaceNav[] }) {
         id="menu-movil"
         aria-label="Principal"
         hidden={!abierto}
-        className="basis-full border-t border-border md:hidden"
+        className="basis-full border-t border-border lg:hidden"
       >
         <ul className="grid">
           {resto.map((e) => (
