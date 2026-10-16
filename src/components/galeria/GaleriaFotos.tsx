@@ -6,7 +6,7 @@ function esPanoramica(imagen: Imagen): boolean {
   return imagen.ancho / imagen.alto > 1.3;
 }
 
-/** Rejilla de fotos con dimensiones declaradas. La panorámica ocupa el ancho completo. */
+/** Rejilla de fotos. Las verticales se fuerzan a 3:4. La panorámica ocupa el ancho completo. */
 export function GaleriaFotos({ imagenes }: { imagenes: readonly Imagen[] }) {
   if (imagenes.length === 0) {
     return (
@@ -23,7 +23,11 @@ export function GaleriaFotos({ imagenes }: { imagenes: readonly Imagen[] }) {
         return (
           <li
             key={`${imagen.src}-${indice}`}
-            className={`border border-border bg-surface${panoramica ? ' col-span-full' : ''}`}
+            className={
+              panoramica
+                ? 'col-span-full border border-border bg-surface'
+                : 'aspect-3/4 border border-border bg-surface'
+            }
           >
             <Image
               src={imagen.src}
@@ -32,7 +36,7 @@ export function GaleriaFotos({ imagenes }: { imagenes: readonly Imagen[] }) {
               height={imagen.alto}
               sizes={panoramica ? '100vw' : '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'}
               loading={indice === 0 ? 'eager' : 'lazy'}
-              className="h-auto w-full"
+              className={panoramica ? 'h-auto w-full' : 'h-full w-full object-cover'}
             />
           </li>
         );
