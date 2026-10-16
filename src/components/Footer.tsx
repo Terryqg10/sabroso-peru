@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { restaurante } from '@/config/restaurante';
 import { resumenHorarios } from '@/lib/horarios';
@@ -12,6 +13,14 @@ export function Footer() {
 
   return (
     <footer className="mt-16 border-t border-border bg-bg px-gutter py-12 text-fg-muted">
+      <Image
+        src="/brand/logo-vertical.png"
+        alt={`${restaurante.nombre}, cocina peruana`}
+        width={768}
+        height={533}
+        sizes="192px"
+        className="mb-10 h-auto w-48"
+      />
       <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <section aria-labelledby="pie-contacto">
           <h2 id="pie-contacto" className={claseTitulo}>

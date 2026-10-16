@@ -36,12 +36,13 @@ test.describe('marca', () => {
     await expect(page.locator('header').getByRole('link', { name: restaurante.nombre })).toBeVisible();
   });
 
-  test('el logotipo de la portada tiene texto alternativo y se carga', async ({ page }) => {
+  test('el logotipo completo del pie tiene texto alternativo y se carga', async ({ page }) => {
     await page.goto('/');
-    const logo = page.locator('main img[src*="logo-vertical"]');
+    const logo = page.locator('footer img[src*="logo-vertical"]');
+    await logo.scrollIntoViewIfNeeded(); // carga diferida: se pide al acercarse al pie
     await expect(logo).toBeVisible();
     await expect(logo).toHaveAttribute('alt', `${restaurante.nombre}, cocina peruana`);
-    expect(await imagenCargada(page, 'main img[src*="logo-vertical"]')).toBe(true);
+    expect(await imagenCargada(page, 'footer img[src*="logo-vertical"]')).toBe(true);
   });
 
   test('hay favicon, icono de pantalla de inicio e imagen para compartir', async ({ page, request }) => {

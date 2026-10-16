@@ -7,22 +7,75 @@ const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const RUTAS = ['/', '/carta', '/para-llevar', '/reservas', '/contacto', '/aviso-legal', '/privacidad', '/accesibilidad'];
 
 test.describe('inicio', () => {
-  test('inicio-cta-reserva: presentación y CTA visible sin hacer scroll', async ({ page }) => {
+  test('inicio-cta-reserva: presentación y un CTA de reserva a la vista sin hacer scroll', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Perú en la mesa');
     await expect(page.locator('main').getByText('Cocina peruana').first()).toBeVisible();
 
+    // Con la foto a sangre, en móvil el botón del hero queda bajo la foto; el CTA de la cabecera
+    // (Reservas) es el que debe verse sin desplazarse, y en escritorio también el del hero.
+    const aLaVista = await page.evaluate(() =>
+      [...document.querySelectorAll('a[href="/reservas"]')].filter((a) => {
+        const r = a.getBoundingClientRect();
+        return r.height > 0 && r.top >= 0 && r.bottom <= window.innerHeight;
+      }).length,
+    );
+    expect(aLaVista, 'hay un enlace a Reservas en la primera pantalla').toBeGreaterThan(0);
+
     const cta = page.locator('main').getByRole('link', { name: 'Reservar mesa' }).first();
+    await cta.scrollIntoViewIfNeeded();
     await expect(cta).toBeVisible();
     await expect(cta).toHaveAttribute('href', '/reservas');
-    const caja = await cta.boundingBox();
-    const altoVentana = page.viewportSize()?.height ?? 0;
-    expect(caja).not.toBeNull();
-    expect((caja?.y ?? 0) + (caja?.height ?? 0), 'el CTA cabe en la primera pantalla').toBeLessThanOrEqual(altoVentana);
-
     await cta.click();
     await expect(page).toHaveURL(/\/reservas$/);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Reserva tu mesa');
+  });
+
+  test('el hero usa una foto con texto alternativo, AVIF y WebP, carga prioritaria y orientación según el ancho', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const foto = page.locator('main picture img').first();
+    await expect(foto).toBeVisible();
+    await expect(foto).toHaveAttribute('alt', /Ceviche peruano/);
+    await expect(foto).toHaveAttribute('fetchpriority', 'high');
+    await expect(foto).toHaveAttribute('loading', 'eager');
+    const formatos = await page.locator('main picture source').evaluateAll((ss) => ss.map((s) => s.getAttribute('type')));
+    expect(formatos).toEqual(['image/avif', 'image/webp', 'image/avif', 'image/webp']);
+    expect(await foto.evaluate((img) => (img as HTMLImageElement).naturalWidth > 0)).toBe(true);
+  });
+
+  test('en móvil el hero sirve la foto vertical y en escritorio la horizontal', async ({ page }) => {
+    for (const [ancho, archivo] of [[390, 'hero-ceviche-tall'], [1280, 'hero-ceviche-wide']] as const) {
+      await page.setViewportSize({ width: ancho, height: 900 });
+      await page.goto('/');
+      const foto = page.locator('main picture img').first();
+      await expect(foto).toBeVisible();
+      const actual = await foto.evaluate((img) => (img as HTMLImageElement).currentSrc);
+      expect(actual.includes(archivo), `@${ancho}: ${actual}`).toBe(true);
+    }
+  });
+
+  test('en móvil la foto ocupa el ancho completo en formato vertical 3:4, encima del texto', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 900 });
+    await page.goto('/');
+    const foto = await page.locator('main picture').first().boundingBox();
+    const titulo = await page.getByRole('heading', { level: 1 }).boundingBox();
+    expect(foto).not.toBeNull();
+    expect(titulo).not.toBeNull();
+    expect(foto?.width ?? 0).toBeGreaterThanOrEqual(389);
+    expect(Math.abs((foto?.height ?? 0) / (foto?.width ?? 1) - 4 / 3)).toBeLessThan(0.02);
+    expect((titulo?.y ?? 0), 'el texto va debajo de la foto').toBeGreaterThanOrEqual((foto?.y ?? 0) + (foto?.height ?? 0));
+  });
+
+  test('en escritorio la foto ocupa la columna izquierda y el texto la derecha', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/');
+    const foto = await page.locator('main picture').first().boundingBox();
+    const titulo = await page.getByRole('heading', { level: 1 }).boundingBox();
+    expect(foto?.x ?? 1).toBe(0);
+    expect(Math.round(foto?.width ?? 0)).toBe(640);
+    expect((titulo?.x ?? 0), 'el titular está en la columna derecha').toBeGreaterThanOrEqual(640);
   });
 
   test('la portada muestra horarios y la sección de cultura', async ({ page }) => {

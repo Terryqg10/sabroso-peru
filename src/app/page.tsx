@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Resenas } from '@/components/Resenas';
 import { resenas } from '@/content/resenas';
@@ -29,8 +28,34 @@ export default function Inicio() {
 
   return (
     <main>
-      <section aria-labelledby="inicio-titulo" className="grid min-h-hero lg:grid-cols-2">
-        <div className="flex flex-col justify-center px-gutter py-16">
+      <section aria-labelledby="inicio-titulo" className="grid lg:grid-cols-2">
+        {/* Foto a sangre: vertical en móvil y horizontal en escritorio. <picture> en lugar de next/image
+            para controlar el HTML y el srcset; fetchPriority="high" en vez de `priority` (obsoleto en Next 16.4).
+            En móvil hay dos anchuras de la foto vertical (900 y 1792 px) para no descargar más de lo necesario. */}
+        <picture className="relative block aspect-3/4 w-full lg:aspect-auto lg:min-h-hero">
+          <source
+            srcSet="/images/hero-ceviche-tall-900.avif 900w, /images/hero-ceviche-tall.avif 1792w"
+            sizes="100vw"
+            type="image/avif"
+            media="(max-width: 1023px)"
+          />
+          <source
+            srcSet="/images/hero-ceviche-tall-900.webp 900w, /images/hero-ceviche-tall.webp 1792w"
+            sizes="100vw"
+            type="image/webp"
+            media="(max-width: 1023px)"
+          />
+          <source srcSet="/images/hero-ceviche-wide.avif" type="image/avif" />
+          <source srcSet="/images/hero-ceviche-wide.webp" type="image/webp" />
+          <img
+            src="/images/hero-ceviche-wide.jpg"
+            alt="Ceviche peruano con pescado blanco, lima, cebolla roja y ají limo servido en un cuenco de cerámica"
+            fetchPriority="high"
+            loading="eager"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </picture>
+        <div className="flex flex-col justify-center px-gutter py-16 lg:min-h-hero">
           <p className="text-label font-semibold uppercase tracking-caps text-accent-text">
             Cocina peruana
           </p>
@@ -62,36 +87,28 @@ export default function Inicio() {
             </Link>
           </div>
         </div>
+      </section>
 
-        <aside
-          aria-labelledby="inicio-horarios"
-          className="flex flex-col justify-center border-t border-border bg-surface px-gutter py-16 lg:border-l lg:border-t-0"
-        >
-          <Image
-            src="/brand/logo-vertical.png"
-            alt={`${restaurante.nombre}, cocina peruana`}
-            width={768}
-            height={533}
-            priority
-            sizes="(min-width: 1024px) 256px, 224px"
-            className="mb-10 h-auto w-56 lg:w-64"
-          />
-          <h2
-            id="inicio-horarios"
-            className="text-label font-bold uppercase tracking-caps text-fg"
-          >
-            Horarios
-          </h2>
-          <dl className="mt-4 grid gap-1 text-body text-fg-muted">
-            {horarios.map((fila) => (
-              <div key={fila.dias} className="flex flex-wrap gap-x-2">
-                <dt>{fila.dias}:</dt>
-                <dd>{fila.horario}</dd>
-              </div>
-            ))}
-          </dl>
-          <p className="mt-6 text-body text-fg-muted">{restaurante.direccion}</p>
-        </aside>
+      <section aria-labelledby="horarios-titulo" className="border-t border-border bg-surface px-gutter py-12">
+        <div className="mx-auto grid max-w-prose-token gap-8 md:grid-cols-2">
+          <div>
+            <h2 id="horarios-titulo" className="text-label font-bold uppercase tracking-caps text-fg">
+              Horarios
+            </h2>
+            <dl className="mt-4 grid gap-1 text-body text-fg-muted">
+              {horarios.map((fila) => (
+                <div key={fila.dias} className="flex flex-wrap gap-x-2">
+                  <dt>{fila.dias}:</dt>
+                  <dd>{fila.horario}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+          <div>
+            <h2 className="text-label font-bold uppercase tracking-caps text-fg">Dónde estamos</h2>
+            <p className="mt-4 text-body text-fg-muted">{restaurante.direccion}</p>
+          </div>
+        </div>
       </section>
 
       <section aria-labelledby="cultura-titulo" className="px-gutter py-16">
