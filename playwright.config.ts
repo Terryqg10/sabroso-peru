@@ -4,6 +4,8 @@ import { defineConfig, devices } from '@playwright/test';
 const PORT = Number(process.env.E2E_PORT ?? 3200);
 const BASE_URL = `http://localhost:${PORT}`;
 const isCI = !!process.env.CI;
+// Por defecto los e2e corren contra el build de producción. `pnpm test:e2e:dev` (E2E_DEV=1) usa `next dev`.
+const usaProd = !process.env.E2E_DEV;
 
 export default defineConfig({
   testDir: './tests',
@@ -32,10 +34,13 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: isCI ? `pnpm run start -p ${PORT}` : `pnpm run dev -p ${PORT}`,
+    command: usaProd
+      ? `pnpm run build && pnpm run start -p ${PORT}`
+      : `pnpm run dev -p ${PORT}`,
     url: BASE_URL,
-    reuseExistingServer: !isCI,
-    timeout: 120_000,
+    // En producción nunca se reutiliza: evita coger un `next dev` abierto por error.
+    reuseExistingServer: !usaProd && !isCI,
+    timeout: usaProd ? 180_000 : 120_000,
     stdout: 'ignore',
     stderr: 'pipe',
   },

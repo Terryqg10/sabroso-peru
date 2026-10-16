@@ -67,7 +67,7 @@ Medido con la última versión:
 | Comprobación | Resultado |
 |---|---|
 | Tests unitarios y de componentes | 88 |
-| Tests e2e (Chromium y WebKit móvil), incluido axe | 188 (94 por proyecto), con `CI=true` sobre el build de producción |
+| Tests e2e (Chromium y WebKit móvil), incluido axe | 188 (94 por proyecto), sobre el build de producción (`pnpm test:e2e`) |
 | Lighthouse, móvil, 9 páginas | rendimiento 99, accesibilidad 100 |
 | Lighthouse, escritorio, 4 páginas | rendimiento 100, accesibilidad 100 |
 | axe | sin violaciones graves en 9 páginas × 3 anchos |
@@ -78,7 +78,7 @@ Limitaciones conocidas, sin maquillar:
 - axe y Lighthouse solo detectan una parte de los problemas de accesibilidad. No hay revisión con lector de pantalla ni auditoría externa.
 - Los textos legales son un borrador pendiente de validación jurídica.
 - `pnpm audit --audit-level=high` falla por `braces`, una dependencia de desarrollo sin parche. Está cubierta por [ADR-001](sdd/adrs/ADR-001-excepcion-audit-braces.md) hasta el 2026-11-15, y `pnpm run audit:ci` (el que usa la CI) aplica la excepción y falla solo cuando caduca.
-- Con `next dev` el servidor se cae durante los e2e en la máquina de desarrollo. Los e2e se ejecutan con el servidor de producción (`CI=true`). Sin `CI=true`, `pnpm test:e2e` usa `next dev` y falla `marca.spec.ts:69` (en desarrollo Next sustituye el origen de `og:image` por `localhost`); con el build de producción pasan los 188.
+- Con `next dev` el servidor se cae a veces durante los e2e en la máquina de desarrollo, y `marca.spec.ts:69` (og:image) falla porque en desarrollo Next sustituye el origen por `localhost`. Por eso `pnpm test:e2e` usa el build de producción (188 pasan); `pnpm test:e2e:dev` es solo para iterar.
 - El estilo visual está en borrador 0.1.0 y el hero no tiene fotografía porque no hay material real.
 
 ## Arrancar
@@ -90,14 +90,14 @@ pnpm dev
 
 Abre <http://localhost:3200>. El proyecto usa el puerto **3200** (no el 3000) para no chocar con otros proyectos de desarrollo; los e2e lo cambian con `E2E_PORT`.
 
-Para ejecutar los tests e2e (con el servidor de producción):
+Para ejecutar los tests e2e:
 
 ```bash
-pnpm build
-CI=true pnpm test:e2e
+pnpm test:e2e        # build de producción + next start (cierra tareas)
+pnpm test:e2e:dev    # next dev, iteración rápida; falla marca.spec.ts:69 (og:image)
 ```
 
-En PowerShell: `$env:CI = "true"; pnpm test:e2e`.
+Antes de `pnpm test:e2e`, para `pnpm dev` si lo tienes abierto: ambos usan el puerto 3200 y el de tests hace build de producción.
 
 La primera vez, instala los navegadores con `pnpm test:e2e:install`.
 

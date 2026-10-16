@@ -18,6 +18,7 @@
     "test:watch": "vitest",
     "test:e2e:install": "playwright install --with-deps chromium webkit",
     "test:e2e": "playwright test",
+    "test:e2e:dev": "node scripts/test-e2e-dev.mjs",
     "test:a11y": "node scripts/check-a11y.mjs",
     "check-palette": "node scripts/check-palette.mjs",
     "check-secrets": "node scripts/check-secrets.mjs",
