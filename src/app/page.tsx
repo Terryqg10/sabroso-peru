@@ -49,7 +49,7 @@ export default function Inicio() {
           <source srcSet="/images/hero-ceviche-wide.webp" type="image/webp" />
           <img
             src="/images/hero-ceviche-wide.jpg"
-            alt="Ceviche peruano con pescado blanco, lima, cebolla roja y ají limo servido en un cuenco de cerámica"
+            alt="Ceviche peruano con pescado blanco, lima, cebolla roja, ají limo, camote, choclo y cancha servido en un cuenco de cerámica"
             fetchPriority="high"
             loading="eager"
             className="absolute inset-0 h-full w-full object-cover"

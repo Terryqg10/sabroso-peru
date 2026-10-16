@@ -42,7 +42,8 @@ test.describe('marca', () => {
     await logo.scrollIntoViewIfNeeded(); // carga diferida: se pide al acercarse al pie
     await expect(logo).toBeVisible();
     await expect(logo).toHaveAttribute('alt', `${restaurante.nombre}, cocina peruana`);
-    expect(await imagenCargada(page, 'footer img[src*="logo-vertical"]')).toBe(true);
+    // Carga diferida: se espera a que termine en lugar de comprobarlo en el mismo instante.
+    await expect.poll(() => imagenCargada(page, 'footer img[src*="logo-vertical"]')).toBe(true);
   });
 
   test('hay favicon, icono de pantalla de inicio e imagen para compartir', async ({ page, request }) => {
