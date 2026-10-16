@@ -26,7 +26,8 @@
     "db:types": "node scripts/db-types.mjs",
     "backup": "node scripts/backup.mjs",
     "verify": "node scripts/verify.mjs",
-    "build-logo": "node scripts/build-logo.mjs"
+    "build-logo": "node scripts/build-logo.mjs",
+    "optimize-images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.460.0",
