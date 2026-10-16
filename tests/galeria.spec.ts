@@ -14,10 +14,11 @@ test.describe('galeria', () => {
     expect(sinAlt).toEqual([]);
   });
 
-  test('la galería muestra las 5 imágenes', async ({ page }) => {
+  test('la galería muestra las 7 imágenes, con la panorámica la última', async ({ page }) => {
     await page.goto('/galeria');
     const imagenes = page.locator('main img');
-    await expect(imagenes).toHaveCount(5);
+    await expect(imagenes).toHaveCount(7);
+    await expect(imagenes.last()).toHaveAttribute('src', /galeria-fachada/);
   });
 
   test('todas las imágenes de la galería tienen alt descriptivo', async ({ page }) => {
