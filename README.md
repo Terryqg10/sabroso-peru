@@ -66,8 +66,8 @@ Medido con la última versión:
 
 | Comprobación | Resultado |
 |---|---|
-| Tests unitarios y de componentes | 85 |
-| Tests e2e (Chromium y WebKit móvil), incluido axe | 154 (77 por proyecto) |
+| Tests unitarios y de componentes | 88 |
+| Tests e2e (Chromium y WebKit móvil), incluido axe | 188 (94 por proyecto), con `CI=true` sobre el build de producción |
 | Lighthouse, móvil, 9 páginas | rendimiento 99, accesibilidad 100 |
 | Lighthouse, escritorio, 4 páginas | rendimiento 100, accesibilidad 100 |
 | axe | sin violaciones graves en 9 páginas × 3 anchos |
@@ -78,7 +78,7 @@ Limitaciones conocidas, sin maquillar:
 - axe y Lighthouse solo detectan una parte de los problemas de accesibilidad. No hay revisión con lector de pantalla ni auditoría externa.
 - Los textos legales son un borrador pendiente de validación jurídica.
 - `pnpm audit --audit-level=high` falla por `braces`, una dependencia de desarrollo sin parche. Está cubierta por [ADR-001](sdd/adrs/ADR-001-excepcion-audit-braces.md) hasta el 2026-11-15, y `pnpm run audit:ci` (el que usa la CI) aplica la excepción y falla solo cuando caduca.
-- Con `next dev` el servidor se cae durante los e2e en la máquina de desarrollo. Los e2e se ejecutan con el servidor de producción (`CI=true`).
+- Con `next dev` el servidor se cae durante los e2e en la máquina de desarrollo. Los e2e se ejecutan con el servidor de producción (`CI=true`). Sin `CI=true`, `pnpm test:e2e` usa `next dev` y falla `marca.spec.ts:69` (en desarrollo Next sustituye el origen de `og:image` por `localhost`); con el build de producción pasan los 188.
 - El estilo visual está en borrador 0.1.0 y el hero no tiene fotografía porque no hay material real.
 
 ## Arrancar
@@ -96,6 +96,8 @@ Para ejecutar los tests e2e (con el servidor de producción):
 pnpm build
 CI=true pnpm test:e2e
 ```
+
+En PowerShell: `$env:CI = "true"; pnpm test:e2e`.
 
 La primera vez, instala los navegadores con `pnpm test:e2e:install`.
 
