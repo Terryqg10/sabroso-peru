@@ -1,6 +1,13 @@
 import { z } from 'zod';
 
-export const ETIQUETAS = ['vegetariano', 'sin-gluten', 'picante', 'para-compartir'] as const;
+export const ETIQUETAS = [
+  'vegetariano',
+  'vegano',
+  'sin-gluten',
+  'sin-lactosa',
+  'picante',
+  'para-compartir',
+] as const;
 
 // Los 14 alérgenos de declaración obligatoria en la UE. VERIFICAR contra la norma vigente.
 export const ALERGENOS = [

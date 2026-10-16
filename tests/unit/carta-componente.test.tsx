@@ -125,4 +125,15 @@ describe('carta sin platos', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Estamos preparando la carta online');
     expect(screen.getAllByRole('button')).toHaveLength(4);
   });
+
+  it('muestra el estado vacío cuando no hay platos', () => {
+    render(<CartaInteractiva carta={vacia} />);
+    expect(screen.getByText(/estamos preparando la carta/i)).toBeInTheDocument();
+  });
+
+  it('muestra el mensaje sin platos al pulsar una categoría vacía', () => {
+    render(<CartaInteractiva carta={vacia} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Fríos' }));
+    expect(screen.getByText(/sin platos por ahora/i)).toBeInTheDocument();
+  });
 });

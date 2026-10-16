@@ -2,7 +2,9 @@ import type { Alergeno, Etiqueta } from '@/content/carta';
 
 export const TEXTO_ETIQUETA: Record<Etiqueta, string> = {
   vegetariano: 'Vegetariano',
+  vegano: 'Vegano',
   'sin-gluten': 'Sin gluten',
+  'sin-lactosa': 'Sin lactosa',
   picante: 'Picante',
   'para-compartir': 'Para compartir',
 };

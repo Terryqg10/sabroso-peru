@@ -59,7 +59,7 @@ describe('CA-13 cartaSchema', () => {
   });
 
   it('rechaza etiquetas y alérgenos desconocidos', () => {
-    expect(cartaSchema.safeParse(conPlato({ etiquetas: ['vegano'] })).success).toBe(false);
+    expect(cartaSchema.safeParse(conPlato({ etiquetas: ['sin-azucar'] })).success).toBe(false);
     expect(cartaSchema.safeParse(conPlato({ alergenos: ['polen'] })).success).toBe(false);
   });
 

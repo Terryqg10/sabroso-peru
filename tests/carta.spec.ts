@@ -34,13 +34,6 @@ test.describe('carta', () => {
     expect(await page.locator('main h2').allTextContents()).toEqual(CATEGORIAS);
   });
 
-  test('estado vacío: la carta sin platos avisa de que se está preparando', async ({ page }) => {
-    await page.goto('/carta');
-    await expect(page.getByRole('status')).toContainText('Estamos preparando la carta online');
-    await page.getByRole('button', { name: 'Postres' }).click();
-    await expect(page.getByText('Sin platos por ahora.')).toBeVisible();
-  });
-
   test('la carta se puede alcanzar desde la cabecera y el pie', async ({ page }) => {
     await page.goto('/');
     await abrirMenuSiHaceFalta(page);
@@ -86,5 +79,18 @@ test.describe('carta', () => {
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
     );
     expect(desborda).toBe(false);
+  });
+
+  test('la carta muestra platos en todas las categorías', async ({ page }) => {
+    await page.goto('/carta');
+
+    // Sin filtro: cada tarjeta de plato tiene un h3.
+    await expect(page.locator('main h3')).toHaveCount(22);
+
+    // Filtro Ceviches: solo ceviches.
+    await page.getByRole('button', { name: 'Ceviches' }).click();
+    await expect(page.getByRole('heading', { level: 3, name: 'Ceviche clásico' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 3, name: 'Lomo saltado' })).toHaveCount(0);
+    await expect(page.locator('main h3')).toHaveCount(4);
   });
 });
