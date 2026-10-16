@@ -12,7 +12,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 function log(m)   { process.stdout.write(`[check-a11y] ${m}\n`); }
 function error(m) { process.stderr.write(`[check-a11y] x ${m}\n`); }
 
-const playwrightCli = path.join(ROOT, 'node_modules', 'playwright', 'cli.js');
+const playwrightCli = path.join(ROOT, 'node_modules', '@playwright', 'test', 'cli.js');
 if (!fs.existsSync(playwrightCli)) {
   error('No se encuentra Playwright. Ejecuta pnpm install primero.');
   process.exit(1);
