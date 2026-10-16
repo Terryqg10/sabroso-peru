@@ -177,3 +177,13 @@ Origen: `research/competitor-insights.md`. Esta enmienda no reordena ni reescrib
 | T-006 | CA-12, CA-16, CA-18, CA-03 | Galería, pie legal, para llevar y contacto |
 | T-007 | CA-01, CA-10 | Inicio y navegación |
 | T-008 | CA-09 | Pasada de responsive y accesibilidad |
+
+### Enmienda 2 — 2026-10-16 — ADR-005
+
+- RF-11: las etiquetas de la carta pasan de
+  `(vegetariano, sin gluten, picante, para compartir)` a
+  `(vegetariano, vegano, sin gluten, sin-lactosa, picante, para compartir)`.
+- Motivación: los 22 platos de la carta necesitan las dos etiquetas
+  nuevas para describirse con precisión.
+- Sin cambios en los CA. CA-13 sigue cubriendo el requisito de
+  "etiquetas declaradas" de forma genérica.
