@@ -1,7 +1,9 @@
+import { Navigation } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { restaurante } from '@/config/restaurante';
 import { resumenHorarios } from '@/lib/horarios';
+import { urlComoLlegar, urlMapaIncrustado, urlOpenStreetMap } from '@/lib/mapa';
 
 export const metadata: Metadata = {
   title: 'Contacto',
@@ -36,11 +38,6 @@ export default function ContactoPage() {
             <address className="mt-3 text-body not-italic text-fg-muted">
               <p>{restaurante.direccion}</p>
             </address>
-            {restaurante.mapaUrl && (
-              <a href={restaurante.mapaUrl} target="_blank" rel="noopener noreferrer" className={claseEnlace}>
-                Ver en el mapa
-              </a>
-            )}
           </section>
 
           <section aria-labelledby="contacto-horarios">
@@ -55,6 +52,44 @@ export default function ContactoPage() {
                 </div>
               ))}
             </dl>
+          </section>
+
+          <section aria-labelledby="contacto-mapa" className="sm:col-span-2">
+            <h2 id="contacto-mapa" className={claseTitulo}>
+              Cómo llegar
+            </h2>
+            <div className="mt-4 aspect-4/3 w-full overflow-hidden border border-border bg-surface sm:aspect-video">
+              <iframe
+                title={`Mapa con la ubicación de ${restaurante.nombre}`}
+                src={urlMapaIncrustado(restaurante.ubicacion)}
+                loading="lazy"
+                referrerPolicy="no-referrer"
+                sandbox="allow-scripts allow-same-origin"
+                className="h-full w-full"
+              />
+            </div>
+            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+              <a
+                href={urlComoLlegar(restaurante.ubicacion)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-accent px-6 text-label font-bold uppercase tracking-caps text-accent-fg hover:bg-accent-hover sm:w-auto"
+              >
+                <Navigation aria-hidden="true" className="size-4" />
+                Cómo llegar
+              </a>
+              <a
+                href={urlOpenStreetMap(restaurante.ubicacion)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={claseEnlace}
+              >
+                Abrir en OpenStreetMap
+              </a>
+            </div>
+            <p className="mt-3 text-label text-fg-muted">
+              «Cómo llegar» abre tu aplicación de navegación con la ruta hasta el restaurante.
+            </p>
           </section>
 
           <section aria-labelledby="contacto-medios" className="sm:col-span-2">

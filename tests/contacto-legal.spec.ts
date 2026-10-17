@@ -62,6 +62,40 @@ test.describe('contacto', () => {
     );
     await expect(principal.getByRole('link', { name: 'Reservar una mesa' })).toHaveAttribute('href', '/reservas');
   });
+
+  test('muestra un mapa de OpenStreetMap con título y un botón «Cómo llegar» con las coordenadas', async ({
+    page,
+  }) => {
+    await page.goto('/contacto');
+    const mapa = page.locator('main iframe');
+    await expect(mapa).toHaveCount(1);
+    await expect(mapa).toHaveAttribute('title', /Mapa con la ubicación de Sabroso Perú/);
+    const origen = new URL((await mapa.getAttribute('src')) ?? '');
+    expect(origen.origin).toBe('https://www.openstreetmap.org');
+    expect(origen.searchParams.get('marker')).toBe('40.4728,-3.8724');
+
+    const boton = page.locator('main').getByRole('link', { name: 'Cómo llegar' });
+    const destino = new URL((await boton.getAttribute('href')) ?? '');
+    expect(destino.origin + destino.pathname).toBe('https://www.google.com/maps/dir/');
+    expect(destino.searchParams.get('destination')).toBe('40.4728,-3.8724');
+    await expect(boton).toHaveAttribute('target', '_blank');
+    await expect(boton).toHaveAttribute('rel', /noopener/);
+    const caja = await boton.boundingBox();
+    expect(caja?.height).toBeGreaterThanOrEqual(44);
+  });
+
+  test('el mapa cabe en 320 px sin scroll horizontal y la política de privacidad lo declara', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 700 });
+    await page.goto('/contacto');
+    const caja = await page.locator('main iframe').boundingBox();
+    expect(caja?.width).toBeLessThanOrEqual(320);
+    const desborda = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+    expect(desborda).toBe(false);
+    await page.goto('/privacidad');
+    await expect(page.getByRole('heading', { name: 'Mapa de la página de contacto' })).toBeVisible();
+  });
 });
 
 test.describe('accesibilidad de las páginas nuevas', () => {

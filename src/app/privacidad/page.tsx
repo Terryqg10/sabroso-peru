@@ -38,6 +38,15 @@ export default function PrivacidadPage() {
           restaurante, que los usa para gestionar tu reserva.
         </p>
       </Seccion>
+      <Seccion titulo="Mapa de la página de contacto">
+        <p>
+          La página de contacto muestra un mapa de OpenStreetMap. Al cargarla, tu navegador se conecta
+          a openstreetmap.org, que recibe tu dirección IP y los datos técnicos habituales de tu
+          navegador. Esta web no guarda esos datos. El botón «Cómo llegar» solo abre Google Maps si lo
+          pulsas. VERIFICAR con asesoramiento jurídico la información que debe darse sobre estos
+          terceros.
+        </p>
+      </Seccion>
       <Seccion titulo="Cookies y analítica">
         <p>
           Esta web no usa cookies propias ni herramientas de analítica. VERIFICAR antes de publicar y

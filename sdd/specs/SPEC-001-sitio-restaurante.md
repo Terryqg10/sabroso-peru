@@ -187,3 +187,21 @@ Origen: `research/competitor-insights.md`. Esta enmienda no reordena ni reescrib
   nuevas para describirse con precisión.
 - Sin cambios en los CA. CA-13 sigue cubriendo el requisito de
   "etiquetas declaradas" de forma genérica.
+
+### Enmienda 3 — 2026-10-17 — ADR-006
+
+- §9 Datos y privacidad: la página /contacto incrusta un mapa de OpenStreetMap. Al cargarlo, el
+  navegador del visitante envía a openstreetmap.org su IP y datos del navegador. El sitio no
+  guarda ni trata esos datos. Se sigue sin usar cookies propias ni analítica. La política de
+  privacidad lo declara. Donde decía «los datos no se envían a terceros desde el sitio» se lee
+  «los datos que el visitante escribe no se envían a terceros desde el sitio; el mapa de
+  /contacto sí contacta con OpenStreetMap».
+- §10 APIs externas: se añaden dos filas.
+
+| API | Uso | Coste | Términos |
+|---|---|---|---|
+| OpenStreetMap (`openstreetmap.org/export/embed.html`) | Mapa incrustado en /contacto | Sin coste ni clave | VERIFICAR términos de uso del embed |
+| Google Maps (enlace `maps/dir/?api=1`) | Botón «Cómo llegar»: abre la app de navegación | Sin coste ni clave; solo se contacta al pulsar | VERIFICAR términos de los enlaces de Google Maps |
+
+- Topes de coste: no aplican (sin API de pago).
+- Sin cambios en los CA. Tarea derivada: T-021.
