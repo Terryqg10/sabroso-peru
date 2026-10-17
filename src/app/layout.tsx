@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
 import { AvisoDemo } from '@/components/AvisoDemo';
+import { BotonLlamar } from '@/components/BotonLlamar';
 import { Cabecera } from '@/components/Cabecera';
 import { Footer } from '@/components/Footer';
 import { restaurante } from '@/config/restaurante';
@@ -33,6 +34,7 @@ export default function RootLayout({
           {children}
         </div>
         <Footer />
+        <BotonLlamar />
       </body>
     </html>
   );

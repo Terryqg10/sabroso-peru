@@ -13,7 +13,7 @@ export function Footer() {
   const horarios = resumenHorarios(restaurante.horarios);
 
   return (
-    <footer className="mt-16 border-t border-border bg-bg px-gutter py-16 text-fg-muted">
+    <footer className="mt-16 border-t border-border bg-bg px-gutter pt-16 pb-28 text-fg-muted">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div className="flex flex-col gap-6">

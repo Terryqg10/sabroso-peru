@@ -53,7 +53,7 @@ export default function ReservasPage() {
                 href={urlTelefono(restaurante.telefono)}
                 className="mt-2 inline-flex min-h-11 items-center font-semibold text-accent-text hover:text-fg motion-safe:transition-colors"
               >
-                Llamar al restaurante
+                Llamar para reservar
               </a>
             </div>
           </div>

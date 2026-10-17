@@ -191,6 +191,51 @@ test.describe('navegacion', () => {
   });
 });
 
+test.describe('botón flotante de llamada', () => {
+  for (const ruta of RUTAS) {
+    test(`${ruta}: botón de llamada abajo a la derecha, con tel: y al menos 44 px`, async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 800 });
+      await page.goto(ruta);
+      const boton = page.getByRole('link', { name: 'Llamar al restaurante' });
+      await expect(boton).toHaveCount(1);
+      await expect(boton).toHaveAttribute('href', 'tel:+34600000000');
+      const caja = await boton.boundingBox();
+      expect(caja?.width).toBeGreaterThanOrEqual(44);
+      expect(caja?.height).toBeGreaterThanOrEqual(44);
+      // Pegado a la esquina inferior derecha de la ventana, dentro de ella.
+      expect((caja?.x ?? 0) + (caja?.width ?? 0)).toBeGreaterThan(375 - 32);
+      expect((caja?.x ?? 0) + (caja?.width ?? 0)).toBeLessThanOrEqual(375);
+      expect((caja?.y ?? 0) + (caja?.height ?? 0)).toBeGreaterThan(800 - 32);
+      expect((caja?.y ?? 0) + (caja?.height ?? 0)).toBeLessThanOrEqual(800);
+    });
+  }
+
+  test('sigue visible al desplazar la página y no desborda a 320 px', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto('/carta');
+    await page.evaluate(() => window.scrollTo(0, 1500));
+    await expect(page.getByRole('link', { name: 'Llamar al restaurante' })).toBeInViewport();
+    const desborda = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+    expect(desborda).toBe(false);
+  });
+
+  test('el menú móvil abierto cubre el botón de llamada', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto('/');
+    await page.locator('header').getByRole('button', { name: 'Menú' }).click();
+    const cubierto = await page.evaluate(() => {
+      const boton = document.querySelector('a[aria-label="Llamar al restaurante"]');
+      if (!boton) return false;
+      const r = boton.getBoundingClientRect();
+      const encima = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+      return !!encima?.closest('#menu-movil');
+    });
+    expect(cubierto).toBe(true);
+  });
+});
+
 test.describe('menú de la cabecera', () => {
   test('en pantallas estrechas: Reservas siempre a la vista y el resto tras el botón Menú', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 800 });
