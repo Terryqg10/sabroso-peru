@@ -268,6 +268,20 @@ test.describe('menú de la cabecera', () => {
     }
   });
 
+  test('la cabecera es fija y, con la página desplazada, el menú sigue ocupando toda la pantalla', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto('/carta');
+    await page.evaluate(() => window.scrollTo(0, 1500));
+    const cabecera = page.locator('header');
+    expect(await cabecera.evaluate((el) => Math.round(el.getBoundingClientRect().top))).toBe(0);
+    await cabecera.getByRole('button', { name: 'Menú' }).click();
+    const caja = await page.getByRole('dialog', { name: 'Navegación principal' }).boundingBox();
+    expect(caja?.x).toBe(0);
+    expect(caja?.y).toBe(0);
+    expect(caja?.width).toBe(375);
+    expect(caja?.height).toBe(800);
+  });
+
   test('al pasar a escritorio con el menú abierto, el diálogo se cierra', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 800 });
     await page.goto('/');

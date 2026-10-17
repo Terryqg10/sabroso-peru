@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { restaurante } from '@/config/restaurante';
 import { urlTelefono, urlWhatsApp } from '@/lib/contacto';
@@ -25,8 +26,8 @@ export default function ParaLlevarPage() {
   const horarios = resumenHorarios(restaurante.horarios);
 
   return (
-    <main className="px-gutter py-12">
-      <div className="max-w-prose-token">
+    <main className="mx-auto grid max-w-7xl gap-12 px-gutter py-12 md:grid-cols-3 md:py-16">
+      <div className="max-w-prose-token md:col-span-2">
         <Link
           href="/"
           className="inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-caps text-accent-text underline"
@@ -104,6 +105,19 @@ export default function ParaLlevarPage() {
           </p>
         </section>
       </div>
+
+      <aside className="hidden md:sticky md:top-24 md:block md:self-start">
+        <div className="aspect-3/4 overflow-hidden border border-border bg-surface">
+          <Image
+            src="/images/galeria-cocina.jpg"
+            alt="Un chef remata con pinzas un plato de cocina peruana en una cocina profesional"
+            width={600}
+            height={800}
+            sizes="(min-width: 768px) 33vw, 0px"
+            className="h-full w-full object-cover"
+          />
+        </div>
+      </aside>
     </main>
   );
 }

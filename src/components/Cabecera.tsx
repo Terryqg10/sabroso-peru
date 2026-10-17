@@ -6,7 +6,10 @@ import { enlacesCabecera } from '@/lib/navegacion';
 
 export function Cabecera() {
   return (
-    <header className="min-h-nav border-b border-border bg-bg px-gutter">
+    <header className="sticky top-0 z-40 min-h-nav border-b border-border px-gutter">
+      {/* Fondo y desenfoque en una capa aparte: un `backdrop-filter` en el propio <header> haría que el
+          menú móvil (`fixed`) quedara confinado a la barra en lugar de ocupar la pantalla. */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-bg/90 backdrop-blur-sm" />
       <div className="flex min-h-nav flex-wrap items-center justify-between gap-x-3 py-2 sm:gap-x-6">
         <Link
           href="/"

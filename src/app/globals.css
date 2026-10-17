@@ -34,5 +34,7 @@
 
   html {
     scroll-behavior: auto;
+    /* La cabecera es fija: al enfocar un campo o saltar a un anclaje no debe quedar tapado. */
+    scroll-padding-top: calc(var(--nav-height) + 1rem);
   }
 }
