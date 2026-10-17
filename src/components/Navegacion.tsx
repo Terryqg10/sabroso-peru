@@ -11,8 +11,6 @@ import type { EnlaceNav } from '@/lib/navegacion';
 const claseBase =
   'inline-flex min-h-11 items-center px-2 text-label font-semibold uppercase tracking-wider sm:px-3 sm:tracking-caps';
 const claseCta = `${claseBase} bg-accent text-accent-fg hover:bg-accent-hover`;
-const claseOverlay =
-  'inline-flex min-h-11 items-center text-display font-extrabold uppercase tracking-caps text-fg hover:text-accent-text';
 
 const FOCOS = 'a[href], button:not([disabled])';
 
@@ -123,42 +121,71 @@ export function Navegacion({ enlaces }: { enlaces: readonly EnlaceNav[] }) {
           role="dialog"
           aria-modal="true"
           aria-label="Navegación principal"
-          className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-bg px-gutter py-2 lg:hidden"
+          className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-bg px-gutter py-6 lg:hidden"
         >
-          <div className="flex min-h-nav items-center justify-between gap-3 border-b border-border py-2">
-            <Link
-              href="/"
-              onClick={cerrarMenu}
-              className="inline-flex min-h-11 items-center gap-2 text-label font-extrabold uppercase tracking-wide text-fg sm:text-body sm:tracking-caps"
-            >
-              <Image src="/brand/emblema.png" alt="" width={163} height={120} className="h-10 w-auto" />
-              <span className="sr-only xs:not-sr-only">{restaurante.nombre}</span>
+          <div className="flex items-center justify-between border-b border-border pb-6">
+            <Link href="/" onClick={cerrarMenu} className="inline-flex min-h-11 items-center">
+              <Image
+                src="/brand/emblema.png"
+                alt={restaurante.nombre}
+                width={163}
+                height={120}
+                className="h-8 w-auto"
+              />
             </Link>
             <button
               ref={cerrar}
               type="button"
+              aria-label="Cerrar navegación"
               onClick={() => {
                 cerrarMenu();
                 boton.current?.focus();
               }}
-              className={`${claseBase} min-w-11 justify-center border border-border-strong text-fg hover:bg-surface-muted`}
+              className="inline-flex size-11 items-center justify-center text-fg-muted hover:text-fg motion-safe:transition-colors"
             >
-              <X aria-hidden="true" className="size-5" />
-              <span className="sr-only">Cerrar navegación</span>
+              <X aria-hidden="true" className="size-6" />
             </button>
           </div>
 
-          <nav aria-label="Principal" className="grow py-10">
-            <ul className="grid gap-6">
-              {resto.map((e) => (
-                <li key={e.href}>{enlace(e, claseOverlay, cerrarMenu)}</li>
-              ))}
+          <nav aria-label="Principal" className="grow py-12">
+            <ul className="grid gap-8">
+              {resto.map((e, indice) => {
+                const actual = ruta === e.href;
+                return (
+                  <li key={e.href}>
+                    <Link
+                      href={e.href}
+                      aria-current={actual ? 'page' : undefined}
+                      onClick={cerrarMenu}
+                      className="group flex min-h-11 items-baseline gap-4"
+                    >
+                      <span className="text-label font-semibold uppercase tracking-caps text-accent-text">
+                        {String(indice + 1).padStart(2, '0')}
+                      </span>
+                      <span
+                        className={`text-3xl font-extrabold uppercase tracking-caps group-hover:text-accent-text motion-safe:transition-colors ${
+                          actual ? 'text-accent-text' : 'text-fg'
+                        }`}
+                      >
+                        {e.texto}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
           {reserva && (
-            <div className="border-t border-border py-6">
-              {enlace(reserva, `${claseCta} w-full justify-center py-4`, cerrarMenu)}
+            <div className="border-t border-border pt-6">
+              <Link
+                href={reserva.href}
+                aria-current={ruta === reserva.href ? 'page' : undefined}
+                onClick={cerrarMenu}
+                className="flex min-h-11 w-full items-center justify-center bg-accent px-6 py-4 text-label font-bold uppercase tracking-caps text-accent-fg hover:bg-accent-hover"
+              >
+                Reservar mesa
+              </Link>
             </div>
           )}
         </div>

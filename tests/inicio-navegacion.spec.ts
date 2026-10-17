@@ -148,12 +148,12 @@ test.describe('navegacion', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ven a vernos');
     await abrirMenuSiHaceFalta(page);
     await expect(cabecera.getByRole('link', { name: 'Contacto' })).toHaveAttribute('aria-current', 'page');
-    await expect(cabecera.getByRole('link', { name: 'Reservas' }).last()).not.toHaveAttribute('aria-current', 'page');
+    await expect(cabecera.getByRole('link', { name: /^(Reservas|Reservar mesa)$/ }).last()).not.toHaveAttribute('aria-current', 'page');
 
-    await cabecera.getByRole('link', { name: 'Reservas' }).last().click();
+    await cabecera.getByRole('link', { name: /^(Reservas|Reservar mesa)$/ }).last().click();
     await expect(page).toHaveURL(/\/reservas$/);
     await abrirMenuSiHaceFalta(page);
-    await expect(cabecera.getByRole('link', { name: 'Reservas' }).last()).toHaveAttribute('aria-current', 'page');
+    await expect(cabecera.getByRole('link', { name: /^(Reservas|Reservar mesa)$/ }).last()).toHaveAttribute('aria-current', 'page');
   });
 
   test('hay un enlace para saltar al contenido que se muestra al recibir el foco', async ({ page }) => {
