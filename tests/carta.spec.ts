@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { abrirMenuSiHaceFalta } from './helpers';
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
-const CATEGORIAS = ['Ceviches', 'Tiraditos', 'Causas', 'Tradicionales', 'Postres'];
+const CATEGORIAS = ['Ceviches', 'Tiraditos', 'Causas', 'Tradicionales', 'Postres', 'Bebidas'];
 
 test.describe('carta', () => {
   test('carta-anclas: los botones de categoría coinciden con los títulos de sección', async ({ page }) => {
@@ -14,7 +14,7 @@ test.describe('carta', () => {
     expect(botones).toEqual(['Todas', ...CATEGORIAS]);
     const titulos = await page.locator('main h2').allTextContents();
     expect(titulos).toEqual(CATEGORIAS);
-    for (const id of ['ceviches', 'tiraditos', 'causas', 'tradicionales', 'postres']) {
+    for (const id of ['ceviches', 'tiraditos', 'causas', 'tradicionales', 'postres', 'bebidas']) {
       await expect(page.locator(`#categoria-${id}`)).toHaveCount(1);
     }
   });
@@ -85,12 +85,17 @@ test.describe('carta', () => {
     await page.goto('/carta');
 
     // Sin filtro: cada tarjeta de plato tiene un h3.
-    await expect(page.locator('main h3')).toHaveCount(22);
+    await expect(page.locator('main h3')).toHaveCount(27);
 
     // Filtro Ceviches: solo ceviches.
     await page.getByRole('button', { name: 'Ceviches' }).click();
     await expect(page.getByRole('heading', { level: 3, name: 'Ceviche clásico' })).toBeVisible();
     await expect(page.getByRole('heading', { level: 3, name: 'Lomo saltado' })).toHaveCount(0);
     await expect(page.locator('main h3')).toHaveCount(4);
+
+    // Filtro Bebidas: las 5 bebidas.
+    await page.getByRole('button', { name: 'Bebidas' }).click();
+    await expect(page.getByRole('heading', { level: 3, name: 'Chicha morada' })).toBeVisible();
+    await expect(page.locator('main h3')).toHaveCount(5);
   });
 });

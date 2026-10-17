@@ -9,6 +9,7 @@ export const carta = cartaSchema.parse({
     { id: 'causas', titulo: 'Causas' },
     { id: 'tradicionales', titulo: 'Tradicionales' },
     { id: 'postres', titulo: 'Postres' },
+    { id: 'bebidas', titulo: 'Bebidas' },
   ],
   platos: [
     // Ceviches
@@ -35,6 +36,10 @@ export const carta = cartaSchema.parse({
       categoria: 'ceviches',
       etiquetas: ['sin-gluten', 'picante'],
       alergenos: ['pescado', 'crustaceos', 'moluscos'],
+      foto: {
+        src: '/images/plato-ceviche-mixto.jpg',
+        alt: 'Ceviche mixto en cuenco de barro: pescado blanco, calamar y langostino con cebolla roja, ají, camote, choclo y cancha',
+      },
     },
     {
       id: 'ceviche-conchas-negras',
@@ -45,6 +50,10 @@ export const carta = cartaSchema.parse({
       categoria: 'ceviches',
       etiquetas: ['sin-gluten', 'picante'],
       alergenos: ['moluscos'],
+      foto: {
+        src: '/images/plato-ceviche-conchas.jpg',
+        alt: 'Conchas negras abiertas en su jugo oscuro con cebolla roja, ají picado, cilantro, choclo y cancha',
+      },
     },
     {
       id: 'leche-de-tigre',
@@ -80,6 +89,10 @@ export const carta = cartaSchema.parse({
       categoria: 'tiraditos',
       etiquetas: ['sin-gluten', 'picante'],
       alergenos: ['pescado'],
+      foto: {
+        src: '/images/plato-tiradito-rojo.jpg',
+        alt: 'Láminas de pescado blanco con salsa roja de ají panca, cebolla roja en pluma y cilantro, en un plato oscuro',
+      },
     },
     {
       id: 'tiradito-nikkei',
@@ -90,6 +103,10 @@ export const carta = cartaSchema.parse({
       categoria: 'tiraditos',
       etiquetas: ['picante'],
       alergenos: ['pescado', 'soja', 'sesamo', 'gluten'],
+      foto: {
+        src: '/images/plato-tiradito-nikkei.jpg',
+        alt: 'Láminas de pescado blanco con salsa oscura de soja, sésamo blanco y negro, brotes verdes y una rodaja de camote',
+      },
     },
     // Causas
     {
@@ -115,6 +132,10 @@ export const carta = cartaSchema.parse({
       categoria: 'causas',
       etiquetas: ['sin-gluten'],
       alergenos: ['crustaceos', 'huevos'],
+      foto: {
+        src: '/images/plato-causa-cangrejo.jpg',
+        alt: 'Causa de papa amarilla en capas con cangrejo y aguacate, coronada con huevo cocido, aceituna y salsa',
+      },
     },
     {
       id: 'causa-atun',
@@ -125,6 +146,10 @@ export const carta = cartaSchema.parse({
       categoria: 'causas',
       etiquetas: ['sin-gluten'],
       alergenos: ['pescado', 'huevos'],
+      foto: {
+        src: '/images/plato-causa-atun.jpg',
+        alt: 'Causa de papa amarilla en capas con atún desmenuzado y aguacate, coronada con huevo cocido, aceituna y salsa',
+      },
     },
     // Tradicionales
     {
@@ -178,6 +203,10 @@ export const carta = cartaSchema.parse({
       categoria: 'tradicionales',
       etiquetas: ['sin-gluten', 'sin-lactosa'],
       alergenos: [],
+      foto: {
+        src: '/images/plato-pollo-brasa.jpg',
+        alt: 'Pollo a la brasa dorado con patatas fritas, ensalada de lechuga, tomate y pepino, y salsa verde',
+      },
     },
     {
       id: 'arroz-con-pato',
@@ -188,6 +217,10 @@ export const carta = cartaSchema.parse({
       categoria: 'tradicionales',
       etiquetas: [],
       alergenos: ['gluten'],
+      foto: {
+        src: '/images/plato-arroz-con-pato.jpg',
+        alt: 'Arroz verde con guisantes y pimiento, con muslo de pato dorado y carne deshebrada, coronado con cebolla roja en pluma',
+      },
     },
     {
       id: 'seco-de-res',
@@ -218,6 +251,10 @@ export const carta = cartaSchema.parse({
       categoria: 'tradicionales',
       etiquetas: ['sin-gluten', 'sin-lactosa', 'para-compartir'],
       alergenos: [],
+      foto: {
+        src: '/images/plato-pachamanca.jpg',
+        alt: 'Muslo de pollo, trozo de cerdo, papas, choclo y habas servidos humeantes en un plato oscuro',
+      },
     },
     // Postres
     {
@@ -243,6 +280,10 @@ export const carta = cartaSchema.parse({
       categoria: 'postres',
       etiquetas: [],
       alergenos: ['gluten', 'lacteos'],
+      foto: {
+        src: '/images/plato-picarones.jpg',
+        alt: 'Tres aros de picarones fritos bañados en miel oscura de chancaca',
+      },
     },
     {
       id: 'mazamorra-morada',
@@ -252,6 +293,10 @@ export const carta = cartaSchema.parse({
       categoria: 'postres',
       etiquetas: ['sin-gluten', 'sin-lactosa', 'vegano'],
       alergenos: [],
+      foto: {
+        src: '/images/plato-mazamorra.jpg',
+        alt: 'Cuenco de mazamorra morada espesa con canela en rama, clavos, menta y trozos de fruta',
+      },
     },
     {
       id: 'alfajores-manjar-blanco',
@@ -262,6 +307,72 @@ export const carta = cartaSchema.parse({
       categoria: 'postres',
       etiquetas: [],
       alergenos: ['gluten', 'lacteos', 'huevos'],
+      foto: {
+        src: '/images/plato-alfajores.jpg',
+        alt: 'Tres alfajores de masa dorada rellenos de manjar blanco y espolvoreados con azúcar glas',
+      },
+    },
+    // Bebidas
+    {
+      id: 'inka-kola',
+      nombre: 'Inka Kola',
+      descripcion: 'Refresco peruano de sabor amarillo inconfundible.',
+      precio: 3,
+      categoria: 'bebidas',
+      etiquetas: [],
+      alergenos: [],
+      foto: {
+        src: '/images/bebida-inka-kola.jpg',
+        alt: 'Botella de Inca Kola y vaso con hielo sobre una barra de madera',
+      },
+    },
+    {
+      id: 'coca-cola',
+      nombre: 'Coca-Cola',
+      descripcion: 'Refresco clásico.',
+      precio: 3,
+      categoria: 'bebidas',
+      etiquetas: [],
+      alergenos: [],
+      foto: {
+        src: '/images/bebida-coca-cola.jpg',
+        alt: 'Botella de Coca-Cola y vaso con hielo y burbujas sobre una barra de madera',
+      },
+    },
+    {
+      id: 'fanta-naranja',
+      nombre: 'Fanta Naranja',
+      descripcion: 'Refresco de naranja.',
+      precio: 3,
+      categoria: 'bebidas',
+      etiquetas: [],
+      alergenos: [],
+    },
+    {
+      id: 'chicha-morada',
+      nombre: 'Chicha morada',
+      descripcion: 'Bebida tradicional peruana de maíz morado, frutas y canela.',
+      precio: 4,
+      categoria: 'bebidas',
+      etiquetas: [],
+      alergenos: [],
+      foto: {
+        src: '/images/bebida-chicha.jpg',
+        alt: 'Copa de chicha morada con hielo, rodaja de lima y canela en rama',
+      },
+    },
+    {
+      id: 'maracucha',
+      nombre: 'Maracucha',
+      descripcion: 'Refresco natural de maracuyá.',
+      precio: 4,
+      categoria: 'bebidas',
+      etiquetas: [],
+      alergenos: [],
+      foto: {
+        src: '/images/bebida-maracucha.jpg',
+        alt: 'Copa de refresco de maracuyá con hielo, media maracuyá y hierbabuena',
+      },
     },
   ],
 });
