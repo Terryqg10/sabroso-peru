@@ -6,8 +6,9 @@ import type { Carta, Plato } from '@/content/carta';
 import { filtrarCarta, secciones } from '@/lib/carta';
 import { formatearPrecio, TEXTO_ALERGENO, TEXTO_ETIQUETA } from '@/lib/carta/textos';
 
+// En móvil los botones crecen para que cada fila llene el ancho (sin borde derecho irregular); desde sm vuelven a su tamaño.
 const claseFiltro =
-  'inline-flex min-h-11 items-center px-4 text-label font-semibold uppercase tracking-caps';
+  'inline-flex min-h-11 grow items-center justify-center px-4 text-label font-semibold uppercase tracking-caps sm:grow-0';
 
 function TarjetaPlato({ plato }: { plato: Plato }) {
   return (

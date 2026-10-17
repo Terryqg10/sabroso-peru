@@ -34,6 +34,38 @@ test.describe('carta', () => {
     expect(await page.locator('main h2').allTextContents()).toEqual(CATEGORIAS);
   });
 
+  test('los botones de categoría llenan cada fila en móvil y no se estiran en escritorio', async ({ page }) => {
+    const medir = async () =>
+      page.evaluate(() => {
+        const grupo = document.querySelector('[aria-label="Filtrar por categoría"]');
+        if (!grupo) return null;
+        const borde = grupo.getBoundingClientRect().right;
+        const filas = new Map<number, number>();
+        grupo.querySelectorAll('button').forEach((b) => {
+          const r = b.getBoundingClientRect();
+          const y = Math.round(r.top);
+          filas.set(y, Math.max(filas.get(y) ?? 0, r.right));
+        });
+        return { borde, filas: [...filas.values()], anchos: [...grupo.querySelectorAll('button')].map((b) => b.getBoundingClientRect().width) };
+      });
+
+    for (const ancho of [320, 375]) {
+      await page.setViewportSize({ width: ancho, height: 800 });
+      await page.goto('/carta');
+      const datos = await medir();
+      expect(datos?.filas.length, `@${ancho}: hay más de una fila`).toBeGreaterThan(1);
+      for (const derecha of datos?.filas ?? []) {
+        expect(Math.abs(derecha - (datos?.borde ?? 0)), `@${ancho}: la fila termina en el borde`).toBeLessThanOrEqual(1);
+      }
+    }
+
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/carta');
+    const escritorio = await medir();
+    expect(escritorio?.filas.length, 'en escritorio caben en una sola fila').toBe(1);
+    expect(Math.max(...(escritorio?.anchos ?? [0])), 'sin estirar').toBeLessThan(260);
+  });
+
   test('la carta se puede alcanzar desde la cabecera y el pie', async ({ page }) => {
     await page.goto('/');
     await abrirMenuSiHaceFalta(page);
