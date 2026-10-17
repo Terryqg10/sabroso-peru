@@ -132,6 +132,46 @@ test.describe('navegacion', () => {
     });
   }
 
+  test('en la portada, pulsar el logo sube al inicio con scroll suave y sin cambiar de URL', async ({ page }, info) => {
+    await page.goto('/');
+    await page.evaluate(() => window.scrollTo(0, 2500));
+    const inicial = await page.evaluate(() => window.scrollY);
+    expect(inicial).toBeGreaterThan(1000);
+    const logo = page.locator('header').getByRole('link', { name: restaurante.nombre });
+    await logo.click();
+    const muestras = await page.evaluate(
+      () =>
+        new Promise<number[]>((resolver) => {
+          const valores: number[] = [];
+          const t0 = performance.now();
+          const medir = () => {
+            valores.push(window.scrollY);
+            if (window.scrollY === 0 || performance.now() - t0 > 3000) resolver(valores);
+            else requestAnimationFrame(medir);
+          };
+          medir();
+        }),
+    );
+    expect(muestras[muestras.length - 1], 'termina arriba').toBe(0);
+    if (info.project.name === 'chromium') {
+      expect(
+        muestras.some((y) => y > 0 && y < inicial),
+        'hay posiciones intermedias: el desplazamiento es suave',
+      ).toBe(true);
+    }
+    await expect(page).toHaveURL(/\/$/);
+  });
+
+  test('con reduced-motion el logo sube al inicio al instante', async ({ browser }) => {
+    const contexto = await browser.newContext({ reducedMotion: 'reduce' });
+    const pagina = await contexto.newPage();
+    await pagina.goto('/');
+    await pagina.evaluate(() => window.scrollTo(0, 2500));
+    await pagina.locator('header').getByRole('link', { name: restaurante.nombre }).click();
+    await expect.poll(() => pagina.evaluate(() => window.scrollY), { timeout: 1000 }).toBe(0);
+    await contexto.close();
+  });
+
   test('pulsar el logo desde otra página lleva a la portada', async ({ page }) => {
     await page.goto('/contacto');
     await page.locator('header').getByRole('link', { name: restaurante.nombre }).click();
