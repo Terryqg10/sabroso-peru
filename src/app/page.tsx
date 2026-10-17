@@ -10,20 +10,20 @@ const cultura = [
   {
     titulo: 'Ají amarillo',
     texto: 'El chile que da color y carácter a buena parte de la cocina peruana, en cremas, guisos y salsas.',
-    imagen: '/images/galeria-ingredientes.jpg',
-    alt: 'Ingredientes peruanos sobre una pizarra: ají amarillo, lima, cebolla roja, cilantro, maíz morado, quinua y camote',
+    imagen: '/images/cultura-aji-amarillo.jpg',
+    alt: 'Primer plano de ajíes amarillos frescos sobre una superficie oscura, con granos de pimienta',
   },
   {
     titulo: 'Leche de tigre',
     texto: 'El jugo cítrico del ceviche: lima, cebolla y ají, que se bebe también como un pequeño brindis.',
-    imagen: '/images/plato-ceviche-close.jpg',
-    alt: 'Dados de pescado blanco marinado en su jugo cítrico, con cebolla roja, cilantro y rodajas de ají',
+    imagen: '/images/cultura-leche-tigre.jpg',
+    alt: 'Vaso con leche de tigre, el jugo cítrico del ceviche, con un trozo de pescado, cebolla roja y cilantro',
   },
   {
     titulo: 'Mar, andes y selva',
     texto: 'Una despensa muy diversa: pescado fresco, papas, maíz y ajíes que se mezclan en cada plato.',
-    imagen: '/images/galeria-cocina.jpg',
-    alt: 'Un chef remata con pinzas un plato de cocina peruana en una cocina profesional',
+    imagen: '/images/cultura-mar-andes.jpg',
+    alt: 'Bodegón de ingredientes peruanos sobre madera: pescado fresco, maíz morado, papas y ajíes amarillos',
   },
 ] as const;
 

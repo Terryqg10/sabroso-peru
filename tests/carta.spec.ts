@@ -85,7 +85,7 @@ test.describe('carta', () => {
     await page.goto('/carta');
 
     // Sin filtro: cada tarjeta de plato tiene un h3.
-    await expect(page.locator('main h3')).toHaveCount(27);
+    await expect(page.locator('main h3')).toHaveCount(26);
 
     // Filtro Ceviches: solo ceviches.
     await page.getByRole('button', { name: 'Ceviches' }).click();
@@ -93,9 +93,9 @@ test.describe('carta', () => {
     await expect(page.getByRole('heading', { level: 3, name: 'Lomo saltado' })).toHaveCount(0);
     await expect(page.locator('main h3')).toHaveCount(4);
 
-    // Filtro Bebidas: las 5 bebidas.
+    // Filtro Bebidas: las 4 bebidas.
     await page.getByRole('button', { name: 'Bebidas' }).click();
     await expect(page.getByRole('heading', { level: 3, name: 'Chicha morada' })).toBeVisible();
-    await expect(page.locator('main h3')).toHaveCount(5);
+    await expect(page.locator('main h3')).toHaveCount(4);
   });
 });

@@ -64,6 +64,10 @@ export const carta = cartaSchema.parse({
       categoria: 'ceviches',
       etiquetas: ['sin-gluten', 'picante'],
       alergenos: ['pescado'],
+      foto: {
+        src: '/images/plato-leche-tigre.jpg',
+        alt: 'Copa de leche de tigre con trozos de pescado blanco, cebolla roja, cilantro y cancha, sobre una pizarra',
+      },
     },
     // Tiraditos
     {
@@ -231,6 +235,10 @@ export const carta = cartaSchema.parse({
       categoria: 'tradicionales',
       etiquetas: ['sin-gluten', 'sin-lactosa'],
       alergenos: [],
+      foto: {
+        src: '/images/plato-seco-res.jpg',
+        alt: 'Seco de res: trozos de carne en salsa verde de cilantro con guisantes y zanahoria, junto a arroz blanco, frijoles y cebolla roja',
+      },
     },
     {
       id: 'tallarin-saltado',
@@ -241,6 +249,10 @@ export const carta = cartaSchema.parse({
       categoria: 'tradicionales',
       etiquetas: ['picante'],
       alergenos: ['gluten', 'soja'],
+      foto: {
+        src: '/images/plato-tallarin-saltado.jpg',
+        alt: 'Tallarines salteados al wok con tiras de carne, pimiento, tomate y cebolla roja, con cilantro',
+      },
     },
     {
       id: 'pachamanca',
@@ -338,15 +350,6 @@ export const carta = cartaSchema.parse({
         src: '/images/bebida-coca-cola.jpg',
         alt: 'Botella de Coca-Cola y vaso con hielo y burbujas sobre una barra de madera',
       },
-    },
-    {
-      id: 'fanta-naranja',
-      nombre: 'Fanta Naranja',
-      descripcion: 'Refresco de naranja.',
-      precio: 3,
-      categoria: 'bebidas',
-      etiquetas: [],
-      alergenos: [],
     },
     {
       id: 'chicha-morada',
