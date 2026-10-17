@@ -9,7 +9,7 @@ export type Titular = {
 };
 
 export type ConfigRestaurante = {
-  /** Proyecto de demostración: muestra un aviso y bloquea la indexación en buscadores. */
+  /** Proyecto de demostración: bloquea la indexación en buscadores y añade "Proyecto de demostración" al pie. */
   demo: boolean;
   nombre: string;
   /** Solo dígitos, con prefijo de país (ej. 34612345678). */

@@ -6,7 +6,7 @@ Sitio web de un restaurante peruano: presenta la cultura gastronómica, muestra 
 
 **Demo en vivo:** <https://sabroso-peru.vercel.app> · **Código:** <https://github.com/Terryqg10/sabroso-peru>
 
-> **Proyecto de demostración.** El restaurante, los datos de contacto, los horarios y los textos son ficticios. El sitio muestra un aviso en todas las páginas y se publica con `noindex`.
+> **Proyecto de demostración.** El restaurante, los datos de contacto, los horarios y los textos son ficticios. El sitio se publica con `noindex` y el pie indica que es una demostración (ADR-007: ya no hay franja de aviso).
 
 ![Portada en escritorio](docs/capturas/01-inicio-escritorio.png)
 
@@ -106,7 +106,7 @@ La primera vez, instala los navegadores con `pnpm test:e2e:install`.
 Todo lo ficticio está en [src/config/restaurante.ts](src/config/restaurante.ts): nombre, teléfono, WhatsApp, email, dirección, titular, horarios y número máximo de personas.
 
 1. Sustituir los datos de ese archivo por los reales.
-2. Poner `demo: false`: desaparecen el aviso, el `noindex` y el bloqueo de `robots.txt`.
+2. Poner `demo: false`: desaparecen el `noindex`, el bloqueo de `robots.txt` y la frase del pie.
 3. Cargar los platos en `src/content/carta/datos.ts`, las fotos en `src/content/galeria/datos.ts` (con `alt` descriptivo) y las reseñas reales, con permiso, en `src/content/resenas/datos.ts`.
 4. Validar jurídicamente los textos de aviso legal, privacidad y accesibilidad.
 

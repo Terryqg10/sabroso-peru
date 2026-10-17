@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
-import { AvisoDemo } from '@/components/AvisoDemo';
 import { BotonLlamar } from '@/components/BotonLlamar';
 import { Cabecera } from '@/components/Cabecera';
 import { Footer } from '@/components/Footer';
@@ -28,7 +27,6 @@ export default function RootLayout({
         >
           Saltar al contenido
         </a>
-        {restaurante.demo && <AvisoDemo />}
         <Cabecera />
         <div id="contenido" className="flex-1">
           {children}
