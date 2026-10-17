@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Resenas } from '@/components/Resenas';
 import { resenas } from '@/content/resenas';
@@ -9,14 +10,20 @@ const cultura = [
   {
     titulo: 'Ají amarillo',
     texto: 'El chile que da color y carácter a buena parte de la cocina peruana, en cremas, guisos y salsas.',
+    imagen: '/images/galeria-ingredientes.jpg',
+    alt: 'Ingredientes peruanos sobre una pizarra: ají amarillo, lima, cebolla roja, cilantro, maíz morado, quinua y camote',
   },
   {
     titulo: 'Leche de tigre',
     texto: 'El jugo cítrico del ceviche: lima, cebolla y ají, que se bebe también como un pequeño brindis.',
+    imagen: '/images/plato-ceviche-close.jpg',
+    alt: 'Dados de pescado blanco marinado en su jugo cítrico, con cebolla roja, cilantro y rodajas de ají',
   },
   {
     titulo: 'Mar, andes y selva',
     texto: 'Una despensa muy diversa: pescado fresco, papas, maíz y ajíes que se mezclan en cada plato.',
+    imagen: '/images/galeria-cocina.jpg',
+    alt: 'Un chef remata con pinzas un plato de cocina peruana en una cocina profesional',
   },
 ] as const;
 
@@ -116,11 +123,23 @@ export default function Inicio() {
         <h2 id="cultura-titulo" className="mt-2 text-display font-extrabold">
           Sabores con historia
         </h2>
-        <ul className="mt-10 grid gap-6 md:grid-cols-3">
+        <ul className="mt-10 grid gap-8 md:grid-cols-3">
           {cultura.map((tema) => (
-            <li key={tema.titulo} className="border border-border bg-surface p-6">
-              <h3 className="text-label font-bold uppercase tracking-caps text-fg">{tema.titulo}</h3>
-              <p className="mt-3 text-body text-fg-muted">{tema.texto}</p>
+            <li key={tema.titulo} className="group flex flex-col border border-border bg-surface">
+              <div className="aspect-4/3 w-full overflow-hidden border-b border-border">
+                <Image
+                  src={tema.imagen}
+                  alt={tema.alt}
+                  width={600}
+                  height={450}
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  className="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-label font-bold uppercase tracking-caps text-fg">{tema.titulo}</h3>
+                <p className="mt-3 text-body text-fg-muted">{tema.texto}</p>
+              </div>
             </li>
           ))}
         </ul>
