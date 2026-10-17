@@ -11,7 +11,7 @@ export function BotonLlamar() {
     <a
       href={urlTelefono(restaurante.telefono)}
       aria-label="Llamar al restaurante"
-      className="fixed right-4 bottom-4 z-30 inline-flex size-14 items-center justify-center bg-accent text-accent-fg shadow-lift hover:bg-accent-hover motion-safe:transition-colors sm:right-6 sm:bottom-6"
+      className="fixed right-4 bottom-4 z-30 inline-flex size-14 lg:hidden items-center justify-center bg-accent text-accent-fg shadow-lift hover:bg-accent-hover motion-safe:transition-colors sm:right-6 sm:bottom-6"
     >
       <Phone aria-hidden="true" className="size-6" />
     </a>

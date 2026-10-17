@@ -210,6 +210,22 @@ test.describe('botón flotante de llamada', () => {
     });
   }
 
+  test('solo se muestra por debajo de 1024 px', async ({ page }) => {
+    const boton = page.getByRole('link', { name: 'Llamar al restaurante' });
+    for (const [ancho, visible] of [
+      [320, true],
+      [768, true],
+      [1023, true],
+      [1024, false],
+      [1440, false],
+    ] as const) {
+      await page.setViewportSize({ width: ancho, height: 800 });
+      await page.goto('/');
+      if (visible) await expect(boton, `@${ancho}`).toBeVisible();
+      else await expect(boton, `@${ancho}`).toBeHidden();
+    }
+  });
+
   test('sigue visible al desplazar la página y no desborda a 320 px', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 640 });
     await page.goto('/carta');
