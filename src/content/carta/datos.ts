@@ -228,7 +228,7 @@ export const carta = cartaSchema.parse({
       precio: 7,
       categoria: 'postres',
       etiquetas: ['sin-gluten'],
-      alergenos: ['lacteos', 'huevos'],
+      alergenos: ['lacteos', 'huevos', 'sulfitos'],
       foto: {
         src: '/images/plato-suspiro.jpg',
         alt: 'Suspiro a la limeña en copa de vidrio: manjar blanco coronado de merengue con canela',
