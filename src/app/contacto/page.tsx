@@ -12,25 +12,27 @@ export const metadata: Metadata = {
 
 const claseEnlace = 'inline-flex min-h-11 items-center font-semibold text-accent-text underline';
 const claseTitulo = 'text-label font-bold uppercase tracking-caps text-fg';
+const claseBoton =
+  'inline-flex min-h-11 items-center justify-center gap-2 px-6 text-label font-bold uppercase tracking-caps';
 
 export default function ContactoPage() {
   const horarios = resumenHorarios(restaurante.horarios);
 
   return (
-    <main className="px-gutter py-12">
-      <div className="max-w-prose-token">
-        <Link
-          href="/"
-          className="inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-caps text-accent-text underline"
-        >
-          Volver al inicio
-        </Link>
-        <p className="mt-8 text-label font-semibold uppercase tracking-caps text-accent-text">
-          Contacto
-        </p>
+    <main className="mx-auto max-w-7xl px-gutter py-12 md:py-16">
+      <Link
+        href="/"
+        className="inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-caps text-accent-text underline"
+      >
+        Volver al inicio
+      </Link>
+      <div className="mt-8 mb-12">
+        <p className="text-label font-semibold uppercase tracking-caps text-accent-text">Contacto</p>
         <h1 className="mt-2 text-display font-extrabold">Ven a vernos</h1>
+      </div>
 
-        <div className="mt-10 grid gap-10 sm:grid-cols-2">
+      <div className="grid gap-12 md:grid-cols-2">
+        <div className="flex flex-col gap-10">
           <section aria-labelledby="contacto-direccion">
             <h2 id="contacto-direccion" className={claseTitulo}>
               Dirección
@@ -54,45 +56,7 @@ export default function ContactoPage() {
             </dl>
           </section>
 
-          <section aria-labelledby="contacto-mapa" className="sm:col-span-2">
-            <h2 id="contacto-mapa" className={claseTitulo}>
-              Cómo llegar
-            </h2>
-            <div className="mt-4 aspect-4/3 w-full overflow-hidden border border-border bg-surface sm:aspect-video">
-              <iframe
-                title={`Mapa con la ubicación de ${restaurante.nombre}`}
-                src={urlMapaIncrustado(restaurante.ubicacion)}
-                loading="lazy"
-                referrerPolicy="no-referrer"
-                sandbox="allow-scripts allow-same-origin"
-                className="h-full w-full"
-              />
-            </div>
-            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
-              <a
-                href={urlComoLlegar(restaurante.ubicacion)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 w-full items-center justify-center gap-2 bg-accent px-6 text-label font-bold uppercase tracking-caps text-accent-fg hover:bg-accent-hover sm:w-auto"
-              >
-                <Navigation aria-hidden="true" className="size-4" />
-                Cómo llegar
-              </a>
-              <a
-                href={urlOpenStreetMap(restaurante.ubicacion)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={claseEnlace}
-              >
-                Abrir en OpenStreetMap
-              </a>
-            </div>
-            <p className="mt-3 text-label text-fg-muted">
-              «Cómo llegar» abre tu aplicación de navegación con la ruta hasta el restaurante.
-            </p>
-          </section>
-
-          <section aria-labelledby="contacto-medios" className="sm:col-span-2">
+          <section aria-labelledby="contacto-medios">
             <h2 id="contacto-medios" className={claseTitulo}>
               Cómo contactarnos
             </h2>
@@ -117,14 +81,53 @@ export default function ContactoPage() {
                   {restaurante.email}
                 </a>
               </li>
-              <li>
-                <Link href="/reservas" className={claseEnlace}>
-                  Reservar una mesa
-                </Link>
-              </li>
             </ul>
+            <Link
+              href="/reservas"
+              className={`${claseBoton} mt-6 w-full bg-accent text-accent-fg hover:bg-accent-hover sm:w-auto`}
+            >
+              Reservar una mesa
+            </Link>
           </section>
         </div>
+
+        <section aria-labelledby="contacto-mapa" className="flex h-full min-h-96 flex-col">
+          <h2 id="contacto-mapa" className="sr-only">
+            Cómo llegar
+          </h2>
+          <div className="relative min-h-96 grow overflow-hidden border border-border bg-surface">
+            <iframe
+              title={`Mapa con la ubicación de ${restaurante.nombre}`}
+              src={urlMapaIncrustado(restaurante.ubicacion)}
+              loading="lazy"
+              referrerPolicy="no-referrer"
+              sandbox="allow-scripts allow-same-origin"
+              className="absolute inset-0 h-full w-full"
+            />
+          </div>
+          <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+            <a
+              href={urlComoLlegar(restaurante.ubicacion)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${claseBoton} w-full bg-accent text-accent-fg hover:bg-accent-hover sm:w-auto`}
+            >
+              <Navigation aria-hidden="true" className="size-4" />
+              Cómo llegar
+            </a>
+            <a
+              href={urlOpenStreetMap(restaurante.ubicacion)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={claseEnlace}
+            >
+              Abrir en OpenStreetMap
+            </a>
+          </div>
+          <p className="mt-3 text-label text-fg-muted">
+            «Cómo llegar» abre tu aplicación de navegación con la ruta hasta el restaurante.
+          </p>
+        </section>
       </div>
     </main>
   );
