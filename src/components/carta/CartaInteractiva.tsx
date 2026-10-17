@@ -11,15 +11,15 @@ const claseFiltro =
 
 function TarjetaPlato({ plato }: { plato: Plato }) {
   return (
-    <li className="flex h-full flex-col border border-border bg-surface">
+    <li className="group flex h-full flex-col border border-border bg-surface motion-safe:transition-transform motion-safe:duration-300 motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-lift">
       {plato.foto && (
-        <div className="relative aspect-4/3 w-full">
+        <div className="relative aspect-4/3 w-full overflow-hidden">
           <Image
             src={plato.foto.src}
             alt={plato.foto.alt}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-            className="object-cover"
+            className="object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
           />
         </div>
       )}
