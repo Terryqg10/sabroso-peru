@@ -149,7 +149,7 @@ export function Navegacion({ enlaces }: { enlaces: readonly EnlaceNav[] }) {
 
           <nav aria-label="Principal" className="grow py-12">
             <ul className="grid gap-8">
-              {resto.map((e, indice) => {
+              {resto.map((e) => {
                 const actual = ruta === e.href;
                 return (
                   <li key={e.href}>
@@ -159,9 +159,6 @@ export function Navegacion({ enlaces }: { enlaces: readonly EnlaceNav[] }) {
                       onClick={cerrarMenu}
                       className="group flex min-h-11 items-baseline gap-4"
                     >
-                      <span className="text-label font-semibold uppercase tracking-caps text-accent-text">
-                        {String(indice + 1).padStart(2, '0')}
-                      </span>
                       <span
                         className={`text-3xl font-extrabold uppercase tracking-caps group-hover:text-accent-text motion-safe:transition-colors ${
                           actual ? 'text-accent-text' : 'text-fg'
