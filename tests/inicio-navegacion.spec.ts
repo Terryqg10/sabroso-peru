@@ -124,7 +124,8 @@ test.describe('navegacion', () => {
       const hrefs = await cabecera
         .getByRole('link')
         .evaluateAll((as) => as.map((a) => a.getAttribute('href') ?? ''));
-      expect([...hrefs].sort()).toEqual(['/', '/carta', '/contacto', '/galeria', '/para-llevar', '/reservas']);
+      // Con el diálogo móvil abierto, el logo y Reservas aparecen también dentro de él.
+      expect([...new Set(hrefs)].sort()).toEqual(['/', '/carta', '/contacto', '/galeria', '/para-llevar', '/reservas']);
       for (const href of hrefs) {
         expect((await request.get(href)).status(), href).toBe(200);
       }
@@ -147,12 +148,12 @@ test.describe('navegacion', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ven a vernos');
     await abrirMenuSiHaceFalta(page);
     await expect(cabecera.getByRole('link', { name: 'Contacto' })).toHaveAttribute('aria-current', 'page');
-    await expect(cabecera.getByRole('link', { name: 'Reservas' })).not.toHaveAttribute('aria-current', 'page');
+    await expect(cabecera.getByRole('link', { name: 'Reservas' }).last()).not.toHaveAttribute('aria-current', 'page');
 
-    await cabecera.getByRole('link', { name: 'Reservas' }).click();
+    await cabecera.getByRole('link', { name: 'Reservas' }).last().click();
     await expect(page).toHaveURL(/\/reservas$/);
     await abrirMenuSiHaceFalta(page);
-    await expect(cabecera.getByRole('link', { name: 'Reservas' })).toHaveAttribute('aria-current', 'page');
+    await expect(cabecera.getByRole('link', { name: 'Reservas' }).last()).toHaveAttribute('aria-current', 'page');
   });
 
   test('hay un enlace para saltar al contenido que se muestra al recibir el foco', async ({ page }) => {
@@ -209,9 +210,10 @@ test.describe('menú de la cabecera', () => {
     for (const texto of ['Carta', 'Para llevar', 'Contacto']) {
       await expect(cabecera.getByRole('link', { name: texto })).toBeVisible();
     }
-    await boton.click();
+    await page.getByRole('button', { name: 'Cerrar navegación' }).click();
     await expect(boton).toHaveAttribute('aria-expanded', 'false');
     await expect(page.locator('#menu-movil')).toBeHidden();
+    await expect(boton).toBeFocused();
   });
 
   test('Esc cierra el menú y devuelve el foco al botón', async ({ page }) => {
@@ -225,13 +227,55 @@ test.describe('menú de la cabecera', () => {
     await expect(boton).toBeFocused();
   });
 
-  test('un clic fuera cierra el menú', async ({ page }) => {
+  test('el menú es un diálogo a pantalla completa: foco dentro, Tab no sale y el fondo no hace scroll', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto('/');
+    await page.locator('header').getByRole('button', { name: 'Menú' }).click();
+    const dialogo = page.getByRole('dialog', { name: 'Navegación principal' });
+    await expect(dialogo).toBeVisible();
+    await expect(dialogo).toHaveAttribute('aria-modal', 'true');
+    const caja = await dialogo.boundingBox();
+    expect(caja?.width).toBe(375);
+    expect(caja?.height).toBe(800);
+    await expect(page.getByRole('button', { name: 'Cerrar navegación' })).toBeFocused();
+    for (let i = 0; i < 12; i++) {
+      await page.keyboard.press('Tab');
+      const dentro = await page.evaluate(() => !!document.activeElement?.closest('#menu-movil'));
+      expect(dentro, `Tab ${i + 1}: el foco sigue dentro del diálogo`).toBe(true);
+    }
+    await page.keyboard.press('Shift+Tab');
+    expect(await page.evaluate(() => !!document.activeElement?.closest('#menu-movil'))).toBe(true);
+    expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).toBe('hidden');
+    await page.keyboard.press('Escape');
+    expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).not.toBe('hidden');
+  });
+
+  test('a 320 px el diálogo del menú no desborda y sus controles miden al menos 44 px de alto', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto('/');
+    await page.locator('header').getByRole('button', { name: 'Menú' }).click();
+    const dialogo = page.getByRole('dialog', { name: 'Navegación principal' });
+    await expect(dialogo).toBeVisible();
+    const desborda = await dialogo.evaluate((el) => el.scrollWidth > el.clientWidth);
+    expect(desborda).toBe(false);
+    const controles = dialogo.locator('a, button');
+    const total = await controles.count();
+    for (let i = 0; i < total; i++) {
+      const caja = await controles.nth(i).boundingBox();
+      if (caja) expect(caja.height, `control ${i}`).toBeGreaterThanOrEqual(44);
+    }
+  });
+
+  test('al pasar a escritorio con el menú abierto, el diálogo se cierra', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 800 });
     await page.goto('/');
     await page.locator('header').getByRole('button', { name: 'Menú' }).click();
     await expect(page.locator('#menu-movil')).toBeVisible();
-    await page.locator('main').click({ position: { x: 5, y: 5 } });
+    await page.setViewportSize({ width: 1280, height: 800 });
     await expect(page.locator('#menu-movil')).toBeHidden();
+    expect(await page.evaluate(() => getComputedStyle(document.body).overflow)).not.toBe('hidden');
   });
 
   test('al elegir un enlace navega y el menú se cierra', async ({ page }) => {

@@ -1,49 +1,71 @@
 'use client';
 
 import { Menu, X } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { restaurante } from '@/config/restaurante';
 import type { EnlaceNav } from '@/lib/navegacion';
 
 const claseBase =
   'inline-flex min-h-11 items-center px-2 text-label font-semibold uppercase tracking-wider sm:px-3 sm:tracking-caps';
-const claseMenu =
-  'inline-flex min-h-11 w-full items-center text-label font-semibold uppercase tracking-caps text-fg hover:text-accent-text';
 const claseCta = `${claseBase} bg-accent text-accent-fg hover:bg-accent-hover`;
+const claseOverlay =
+  'inline-flex min-h-11 items-center text-display font-extrabold uppercase tracking-caps text-fg hover:text-accent-text';
+
+const FOCOS = 'a[href], button:not([disabled])';
 
 /**
  * Navegación de la cabecera. En pantallas anchas (lg, 1024 px) los enlaces van en línea; en las
- * estrechas (incluida una tableta en vertical), "Reservas" queda siempre a la vista y el resto se abre con el botón "Menú".
- * La lista se define en `src/lib/navegacion.ts`.
+ * estrechas (incluida una tableta en vertical), "Reservas" queda siempre a la vista y el resto se abre
+ * con el botón "Menú" en un diálogo a pantalla completa. La lista se define en `src/lib/navegacion.ts`.
  */
 export function Navegacion({ enlaces }: { enlaces: readonly EnlaceNav[] }) {
   const ruta = usePathname();
   const [abierto, setAbierto] = useState(false);
   const boton = useRef<HTMLButtonElement>(null);
-  const panel = useRef<HTMLElement>(null);
+  const cerrar = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
 
   const reserva = enlaces.find((e) => e.href === '/reservas');
   const resto = enlaces.filter((e) => e.href !== '/reservas');
 
-  // Esc cierra el menú y devuelve el foco al botón; un clic fuera también lo cierra.
+  // Mientras está abierto: el foco entra en el diálogo y se queda dentro (Tab y Mayús+Tab dan la vuelta),
+  // Esc cierra y devuelve el foco al botón, el fondo no hace scroll y pasar a escritorio lo cierra.
   useEffect(() => {
     if (!abierto) return;
+    cerrar.current?.focus();
+    // Solo por debajo de lg: ahí el diálogo existe. La clase está escrita completa para que Tailwind la genere.
+    document.body.classList.add('max-lg:overflow-hidden');
+
     const alTeclear = (evento: KeyboardEvent) => {
       if (evento.key === 'Escape') {
         setAbierto(false);
         boton.current?.focus();
+        return;
       }
+      if (evento.key !== 'Tab') return;
+      // Ciclo de foco manual: no depende de qué elementos considere tabulables cada navegador
+      // (Safari, por ejemplo, omite los enlaces).
+      const focos = Array.from(panel.current?.querySelectorAll<HTMLElement>(FOCOS) ?? []);
+      if (focos.length === 0) return;
+      evento.preventDefault();
+      const indice = focos.findIndex((el) => el === document.activeElement);
+      const paso = evento.shiftKey ? -1 : 1;
+      const siguiente = indice === -1 ? 0 : (indice + paso + focos.length) % focos.length;
+      focos[siguiente]?.focus();
     };
-    const alPulsar = (evento: MouseEvent) => {
-      const destino = evento.target as Node;
-      if (!panel.current?.contains(destino) && !boton.current?.contains(destino)) setAbierto(false);
+    // Al ensanchar la ventana hasta escritorio el diálogo desaparece; hay que soltar el scroll del fondo.
+    const alCambiarAncho = () => {
+      if (window.matchMedia('(min-width: 1024px)').matches) setAbierto(false);
     };
     document.addEventListener('keydown', alTeclear);
-    document.addEventListener('mousedown', alPulsar);
+    window.addEventListener('resize', alCambiarAncho);
     return () => {
+      document.body.classList.remove('max-lg:overflow-hidden');
       document.removeEventListener('keydown', alTeclear);
-      document.removeEventListener('mousedown', alPulsar);
+      window.removeEventListener('resize', alCambiarAncho);
     };
   }, [abierto]);
 
@@ -60,6 +82,8 @@ export function Navegacion({ enlaces }: { enlaces: readonly EnlaceNav[] }) {
       </Link>
     );
   };
+
+  const cerrarMenu = () => setAbierto(false);
 
   return (
     <>
@@ -84,29 +108,61 @@ export function Navegacion({ enlaces }: { enlaces: readonly EnlaceNav[] }) {
           type="button"
           aria-expanded={abierto}
           aria-controls="menu-movil"
-          onClick={() => setAbierto((v) => !v)}
+          onClick={() => setAbierto(true)}
           className={`${claseBase} min-w-11 justify-center gap-2 border border-border-strong text-fg hover:bg-surface-muted`}
         >
-          {abierto ? <X aria-hidden="true" className="size-4" /> : <Menu aria-hidden="true" className="size-4" />}
+          <Menu aria-hidden="true" className="size-4" />
           <span className="sr-only sm:not-sr-only">Menú</span>
         </button>
       </div>
 
-      <nav
-        ref={panel}
-        id="menu-movil"
-        aria-label="Principal"
-        hidden={!abierto}
-        className="basis-full border-t border-border lg:hidden"
-      >
-        <ul className="grid">
-          {resto.map((e) => (
-            <li key={e.href} className="border-b border-border last:border-b-0">
-              {enlace(e, claseMenu, () => setAbierto(false))}
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {abierto && (
+        <div
+          ref={panel}
+          id="menu-movil"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navegación principal"
+          className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-bg px-gutter py-2 lg:hidden"
+        >
+          <div className="flex min-h-nav items-center justify-between gap-3 border-b border-border py-2">
+            <Link
+              href="/"
+              onClick={cerrarMenu}
+              className="inline-flex min-h-11 items-center gap-2 text-label font-extrabold uppercase tracking-wide text-fg sm:text-body sm:tracking-caps"
+            >
+              <Image src="/brand/emblema.png" alt="" width={163} height={120} className="h-10 w-auto" />
+              <span className="sr-only xs:not-sr-only">{restaurante.nombre}</span>
+            </Link>
+            <button
+              ref={cerrar}
+              type="button"
+              onClick={() => {
+                cerrarMenu();
+                boton.current?.focus();
+              }}
+              className={`${claseBase} min-w-11 justify-center border border-border-strong text-fg hover:bg-surface-muted`}
+            >
+              <X aria-hidden="true" className="size-5" />
+              <span className="sr-only">Cerrar navegación</span>
+            </button>
+          </div>
+
+          <nav aria-label="Principal" className="grow py-10">
+            <ul className="grid gap-6">
+              {resto.map((e) => (
+                <li key={e.href}>{enlace(e, claseOverlay, cerrarMenu)}</li>
+              ))}
+            </ul>
+          </nav>
+
+          {reserva && (
+            <div className="border-t border-border py-6">
+              {enlace(reserva, `${claseCta} w-full justify-center py-4`, cerrarMenu)}
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
