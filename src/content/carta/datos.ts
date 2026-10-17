@@ -23,7 +23,7 @@ export const carta = cartaSchema.parse({
       alergenos: ['pescado'],
       foto: {
         src: '/images/plato-ceviche-close.jpg',
-        alt: 'Ceviche clásico de pescado blanco con cebolla roja, camote y choclo',
+        alt: 'Dados de pescado blanco marinado con cebolla roja en pluma, cilantro y rodajas de ají, en un plato oscuro',
       },
     },
     {
@@ -68,7 +68,7 @@ export const carta = cartaSchema.parse({
       alergenos: ['pescado'],
       foto: {
         src: '/images/plato-tiradito.jpg',
-        alt: 'Tiradito de pescado blanco en láminas con crema de ají amarillo',
+        alt: 'Láminas de pescado blanco con crema de ají amarillo, una rodaja de camote y maíz tostado',
       },
     },
     {
@@ -103,7 +103,7 @@ export const carta = cartaSchema.parse({
       alergenos: ['huevos'],
       foto: {
         src: '/images/plato-causa.jpg',
-        alt: 'Causa limeña de pollo en capas de papa amarilla con huevo y aceituna',
+        alt: 'Causa de papa amarilla en capas con pollo desmenuzado y aguacate, coronada con huevo de codorniz y aceituna',
       },
     },
     {
@@ -138,7 +138,7 @@ export const carta = cartaSchema.parse({
       alergenos: ['soja', 'gluten'],
       foto: {
         src: '/images/plato-lomo-saltado.jpg',
-        alt: 'Lomo saltado con patatas fritas y arroz blanco',
+        alt: 'Tiras de lomo salteadas con cebolla roja y tomate, con patatas fritas y arroz blanco',
       },
     },
     {
@@ -152,7 +152,7 @@ export const carta = cartaSchema.parse({
       alergenos: ['gluten', 'lacteos', 'frutos-de-cascara', 'huevos'],
       foto: {
         src: '/images/plato-aji-gallina.jpg',
-        alt: 'Ají de gallina con arroz blanco, huevo y aceituna',
+        alt: 'Pollo desmenuzado en crema de ají amarillo con arroz blanco, huevo cocido, aceitunas, patata y nueces',
       },
     },
     {
@@ -166,7 +166,7 @@ export const carta = cartaSchema.parse({
       alergenos: [],
       foto: {
         src: '/images/plato-anticuchos.jpg',
-        alt: 'Brochetas de anticuchos a la parrilla con papa y choclo',
+        alt: 'Brochetas de anticuchos a la parrilla con patatas asadas y media lima',
       },
     },
     {
@@ -231,7 +231,7 @@ export const carta = cartaSchema.parse({
       alergenos: ['lacteos', 'huevos'],
       foto: {
         src: '/images/plato-suspiro.jpg',
-        alt: 'Suspiro a la limeña con merengue y canela',
+        alt: 'Suspiro a la limeña en copa de vidrio: manjar blanco coronado de merengue con canela',
       },
     },
     {
