@@ -1,7 +1,7 @@
 ---
 id: v4-dense-workspace
 name: Dense Workspace
-version: 0.1.0
+version: 0.2.0
 status: borrador-sin-referencias
 surface: herramienta
 layout: workspace-12col
@@ -69,6 +69,34 @@ para eso: menos scroll, más contexto, menos clics.
 | Empty state | Icono neutro, título en peso 500, texto `fg-muted`, acción principal. Sin ilustraciones grandes. |
 | Skeleton | Bloques `surface-muted` con forma del contenido real. Sin shimmer animado si `prefers-reduced-motion`. |
 
+## Filtros y búsqueda
+
+Convención para herramientas internas y SaaS.
+
+### Escritorio (≥ --bp-lg)
+
+- **Barra superior** con búsqueda global siempre visible. Atajo `Ctrl+K`
+  o `Cmd+K` abre el buscador.
+- **Filtros en la sidebar** o, si la sidebar está colapsada, en una
+  barra horizontal bajo la topbar.
+- Búsqueda global busca en toda la aplicación (clientes, pedidos,
+  documentos) y agrupa los resultados por tipo.
+- Filtros específicos por vista, no globales. Cada tabla o lista tiene
+  sus filtros.
+
+### Móvil (< --bp-md)
+
+- Búsqueda en la topbar como campo plegable o botón de lupa.
+- Filtros en un drawer o sheet, nunca encima del contenido.
+- La búsqueda global también en móvil, con la misma semántica que en
+  escritorio.
+
+### Prohibido
+
+- Búsqueda sin atajo de teclado en escritorio (es estándar de la
+  industria: Linear, Notion, GitHub, Stripe lo tienen).
+- Filtros globales mezclados con filtros de una vista concreta.
+
 ## Layout
 
 - Escritorio: sidebar (`--sidebar-width`) + main. El main contiene filas de `grid-cols-12` con gap `--grid-gap`.
@@ -111,6 +139,57 @@ para eso: menos scroll, más contexto, menos clics.
 - Animación decorativa.
 - Modales sin cierre.
 - Enlaces muertos, botones sin acción, navegación pospuesta.
+
+## Responsive
+
+Mobile-first, pero la densidad se adapta: en móvil no cabe una tabla de
+12 columnas.
+
+- **Sidebar:** en escritorio (`≥ --bp-lg`), visible a la izquierda con
+  ancho `--sidebar-width`. En móvil y tablet, plegado en un drawer
+  cerrable (Esc + click fuera + botón). `aria-modal="true"`.
+- **Topbar:** en móvil incluye un botón de menú (abre el drawer). En
+  escritorio, el botón desaparece.
+- **Filas tabulares (`grid-cols-12`):**
+  - Escritorio (≥ `--bp-lg`): 12 columnas como está definido.
+  - Tablet (`--bp-md` a `--bp-lg`): se ocultan las columnas menos
+    importantes. La identidad siempre visible; el resto según prioridad.
+  - Móvil (`< --bp-md`): la fila se convierte en tarjeta apilada. Cada
+    dato va en su propia línea con etiqueta. La columna de acciones se
+    convierte en un menú contextual (kebab).
+- **Cabecera de tabla:** en móvil desaparece (los datos van etiquetados
+  en cada fila apilada). En tablet y escritorio, sticky.
+- **Botones de fila:** en móvil, ≥ 44×44 px de zona táctil. En
+  escritorio, ≥ 32×32.
+- **Modales:** en móvil ocupan el ancho completo menos `--layout-gutter`.
+  En escritorio, máximo `--modal-max`.
+- **Contenedor de página:** `--layout-container` aplica solo en
+  escritorio. En móvil, ancho 100% con `--layout-gutter` de padding.
+- **Reflujo a 320 px:** obligatorio. Ninguna tabla comprimida ilegible.
+
+## Controles de formulario
+
+Mismos criterios base que v1 (chevron custom, inputs estilizados,
+checkbox/radio personalizados). Ver `design/styles/v1-soft-commerce/
+style.md`, sección "Controles de formulario".
+
+### Particularidades de v4
+
+- **Radios pequeños.** `--radius-control: 0.5rem` (no píldora). La
+  densidad manda.
+- **Chevron custom con trazo fino** (1.5 px), coherente con la
+  tipografía densa.
+- **Altura de controles:** `--control-height` (36 px). Ningún input
+  pasa de 40 px.
+- **Foco visible y explícito.** En v4 los formularios pueden estar
+  dentro de tablas densas, donde el fondo es `--color-surface-muted`. El
+  outline de foco debe verse sobre `--color-surface` y sobre `--color-surface-muted`.
+- **`<select>` en cabecera de tabla:** si se usa como filtro dentro de
+  una fila tabular, el chevron queda alineado con el padding derecho
+  de la celda. Igual que el resto.
+- **`<checkbox>` en filas tabulares:** a la izquierda de la fila, con
+  zona táctil extendida por `padding` a 44×44 px en móvil. En
+  escritorio puede ser 24×24 con padding.
 
 ## Criterios de aceptación del estilo
 
@@ -155,6 +234,11 @@ para eso: menos scroll, más contexto, menos clics.
 7. Una versión aprobada no se edita.
 
 ## Cambios
+
+### 0.2.0 — 2026-10-16
+- Nueva sección "Controles de formulario": particularidades de v4
+  (radios pequeños, altura de control reducida, foco explícito,
+  checkbox en filas tabulares).
 
 ### 0.1.0 — 2026-10-10
 - Versión inicial del estilo (borrador sin referencias).

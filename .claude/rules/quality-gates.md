@@ -24,6 +24,21 @@ tarea con una afirmación: la cierra con evidencia.
    - Cada botón tiene onClick o href válido.
    - Cero enlaces muertos.
    - La navegación está definida, no pospuesta.
+   - Responsive: en todo el rango de 320 a 1280 px (no solo en los
+     breakpoints) no hay scroll horizontal (salvo carruseles, bloques
+     de código y tablas con overflow explícito), ningún elemento de
+     header, nav, main o footer se sale del viewport ni queda recortado
+     por un overflow oculto, y la navegación tiene comportamiento móvil
+     declarado (menú plegable, drawer, tabs inferiores, o equivalente).
+     Evidencia: salida de `pnpm test:e2e` con `tests/responsive.spec.ts`
+     (barrido de 18 anchos) pegada en la review, más una captura a
+     375 px de cada pantalla nueva o modificada.
+   - Tipografía y espaciado escalan: no hay titulares gigantes ni
+     contenedores que se coman el contenido en móvil.
+   - Convenciones del sector: si la UI se aparta de la convención
+     esperada del sector (filtro lateral en e-commerce, horarios
+     visibles en restaurantes, etc.), existe una entrada en
+     `sdd/plans/` bajo `## Decisiones de UI` que lo justifica.
 8. Accesibilidad: axe sin violaciones graves; prefers-reduced-motion
    respetado; foco visible; 44×44 px táctil; texto ≥ 12 px.
 9. Privacidad: sección "Datos y privacidad" de la spec actualizada si se

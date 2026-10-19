@@ -1,7 +1,7 @@
 ---
 id: v3-editorial-dark
 name: Editorial Dark
-version: 0.1.0
+version: 0.2.0
 status: borrador
 surface: marca
 layout: a-sangre
@@ -64,6 +64,16 @@ grande, cifras y contadores. Nada compite con el titular.
 | CTA | Rectangular, `accent` / `accent-fg`, hover `accent-hover`. Sin forma de píldora. |
 | Footer | Fondo `bg`, texto `fg-muted`, tamaño mínimo `--text-min`. |
 
+## Filtros y búsqueda
+
+v3 no es un estilo de catálogo. Si el proyecto tiene uno (por ejemplo,
+una tienda editorial de una marca de moda con carácter), los filtros
+siguen la convención de v1: columna lateral en escritorio, drawer en
+móvil. Pero **con la estética de v3**: esquinas rectas, tipografía
+caps pequeña con tracking, sin chips de píldora.
+
+Si no hay catálogo, esta sección no aplica.
+
 ## Layout
 
 - `--layout-container: 100%` — el contenedor general no tiene márgenes.
@@ -113,6 +123,92 @@ grande, cifras y contadores. Nada compite con el titular.
 - `100vw` como ancho de contenedor.
 - Modo claro (sería v3-claro, versión nueva, con ADR).
 
+## Responsive
+
+Mobile-first aunque el estilo sea "a sangre": a sangre en móvil también
+significa ocupar el ancho, no desbordar.
+
+- **Hero split:** en móvil, columna única: foto arriba (con un `--bp-md`
+  de altura máxima, no `100dvh`), texto debajo. En escritorio, split
+  50/50 con altura `100dvh`.
+- **Nav:** en móvil, solo logo + icono de menú. Los enlaces y las
+  etiquetas giradas del margen derecho se ocultan por debajo de
+  `--bp-lg`. En móvil no hay etiquetas giradas: no caben.
+- **Titular en tres niveles:** la línea 1 y la línea 3 (mayúsculas con
+  tracking) se mantienen en móvil, pero el tracking se reduce a la
+  mitad. La palabra enorme (`--text-display`) usa `clamp()` con mínimo
+  2.5rem.
+- **Slider:** en móvil, cuadrado de flechas más grande (≥ 44×44 px).
+  Contador y barra de progreso debajo del slider, no en el margen.
+- **Franja inferior:** en móvil, la tarjeta se apila sobre el cuadrado de
+  flechas. En escritorio, van en la misma línea.
+- **Bloques de cifras:** en móvil, una cifra por fila con su etiqueta
+  debajo. En escritorio, dos o tres por fila.
+- **A sangre con `--layout-container: 100%`:** el padding lateral de
+  las secciones de contenido es `--layout-gutter`. Sin él, el texto se
+  pega a los bordes en móvil.
+- **Reflujo a 320 px:** obligatorio. Ningún texto girado, ningún titular
+  gigante que desborde.
+
+## Menú móvil
+
+Convención para sitios editoriales oscuros: overlay a pantalla completa
+con tipografía caps.
+
+### Comportamiento
+
+- **Escritorio (≥ --bp-md):** nav horizontal en mayúsculas con
+  tracking, a todo el ancho. Sin contenedor.
+- **Móvil (< --bp-md):** icono de menú discreto a la derecha. Al
+  pulsarlo, overlay a pantalla completa `100dvh`.
+- Overlay con fondo `--color-bg` (carbón) opaco.
+- **Cabecera del overlay:** logo a la izquierda (mismo tratamiento que
+  en la nav), X a la derecha.
+- **Cuerpo:** items en vertical, tipografía en `--text-display` con
+  `clamp(1.5rem, 5vw, 2.5rem)` para que escale bien en móvil, **en mayúsculas con
+  `--tracking-caps`** como el resto del estilo. Alineados a la
+  izquierda. Espaciado vertical entre items ≥ 24 px.
+- **Item activo:** en `--color-accent` (o `--color-accent-text`), sin subrayado, sin
+  fondo tintado. El estilo v3 no tinta.
+- **Pie:** accesos a cuenta y carrito. También en mayúsculas pequeñas
+  con tracking.
+- **Sin animación de apertura.** v3 usa movimiento contenido: el
+  overlay aparece instantáneo o con un fade muy breve
+  (`--duration-micro`).
+- **Scroll lock, focus trap, cierres (X, Esc, elegir enlace):** igual
+  que v1.
+- **Fallback sin JS:** `<a href="#menu-movil">` + CSS `:target` +
+  `useHashOverlay`.
+
+### Particularidades de v3
+
+- Esquinas rectas. El overlay no tiene radios.
+- Nada de bordes redondeados en el icono del menú.
+- El icono del menú tiene un trazo fino de 1.5 px (no 2 px), coherente
+  con el estilo editorial.
+
+## Controles de formulario
+
+Mismos criterios base que v1 (chevron custom, inputs estilizados,
+checkbox/radio personalizados). Ver `design/styles/v1-soft-commerce/
+style.md`, sección "Controles de formulario".
+
+### Particularidades de v3
+
+- **Esquinas rectas.** `--radius-control: 0` en v3. Los inputs, selects
+  y botones no tienen redondeo. Ni siquiera los chips de filtro.
+- **Chevron custom pero con trazo fino** (1.5 px), coherente con el
+  resto.
+- **Inputs con subrayado** en lugar de borde completo cuando el estilo
+  lo requiera (ej. formularios editoriales de suscripción). En ese
+  caso: solo `border-bottom` en `--color-border-strong`, sin `border` completo.
+- **`<textarea>`:** mismo tratamiento. Sin `--radius-control` aplicado
+  (recto).
+- **Botones:** rectangulares, no píldora. `--color-accent` / `--color-accent-fg` para
+  el primario.
+- **Placeholder:** `--color-fg-muted`, no un gris más claro. La referencia
+  tenía placeholders que no cumplían AA.
+
 ## Criterios de aceptación del estilo
 
 | ID | Criterio | Verificación |
@@ -152,6 +248,13 @@ grande, cifras y contadores. Nada compite con el titular.
 6. Una versión aprobada no se edita.
 
 ## Cambios
+
+### 0.2.0 — 2026-10-16
+- Nueva sección "Menú móvil": overlay a pantalla completa con
+  tipografía caps, esquinas rectas, sin animación.
+- Nueva sección "Controles de formulario": particularidades de v3
+  (esquinas rectas, chevron fino, inputs con subrayado opcional,
+  placeholders con contraste AA).
 
 ### 0.1.0 — 2026-10-10
 - Versión inicial del estilo (borrador).

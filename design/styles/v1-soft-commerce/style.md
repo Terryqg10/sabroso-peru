@@ -1,7 +1,7 @@
 ---
 id: v1-soft-commerce
 name: Soft Commerce
-version: 0.3.0
+version: 0.5.0
 status: borrador
 surface: consumo
 layout: contenido-centrado
@@ -57,6 +57,127 @@ saturado para las acciones.
 | Insignias | Píldora, texto ≥ 12 px. |
 | Botón primario | Píldora, `accent` / `accent-fg`, hover `accent-hover`. |
 
+## Filtros y búsqueda
+
+Convención del sector para tiendas de consumo. No se inventa: se sigue
+salvo justificación explícita en `sdd/plans/` bajo `## Decisiones de UI`.
+
+### Escritorio (≥ --bp-lg)
+
+- **Columna lateral izquierda** con los filtros, ancho fijo
+  (`--filter-sidebar-width`, nuevo token en tokens.css si no existe;
+  por defecto 16rem / 256px). El catálogo ocupa el resto del ancho a la
+  derecha.
+- **La columna es sticky** al hacer scroll. Solo se mueven los
+  resultados, no los filtros.
+- Orden de los filtros: categoría → filtros específicos del producto
+  (talla, color, material) → rango de precio → disponibilidad →
+  etiquetas. El usuario ve primero lo que más usa.
+- Botones "Aplicar filtros" y "Limpiar" al final del panel.
+- Contador de filtros activos en la cabecera del panel ("3 activos").
+- La búsqueda vive en la **cabecera** de la página, no dentro del
+  panel de filtros.
+
+### Móvil (< --bp-md)
+
+- **Botón "Filtros"** flotante o en la cabecera de la página, junto al
+  contador de resultados.
+- Al pulsarlo, se abre un **drawer o bottom-sheet a pantalla completa**.
+- Cabecera del drawer: título "Filtros", botón de cerrar, contador de
+  activos.
+- Pie del drawer: "Limpiar" (izquierda) y "Aplicar filtros" (derecha,
+  en `accent`). Ancho completo.
+- El drawer no empuja los productos: se superpone.
+
+### Prohibido
+
+- Poner los filtros como panel desplegable **encima del catálogo** en
+  escritorio. Es lo que hace un formulario, no una tienda. Empuja los
+  productos hacia abajo y rompe la convención.
+- Filtrar sin contador de activos. El usuario tiene que saber cuántos
+  filtros ha aplicado.
+- Botones "Aplicar" fuera del área de filtros.
+
+## Menú móvil
+
+Convención del sector para tiendas de consumo: menú a pantalla
+completa, no dropdown.
+
+### Comportamiento
+
+- **Escritorio (≥ --bp-md):** menú horizontal en la cabecera. Sin
+  overlay.
+- **Móvil (< --bp-md):** icono de menú a la derecha de la cabecera.
+  Al pulsarlo, se abre un **overlay a pantalla completa** que ocupa
+  `100dvh`.
+- El overlay ocupa todo el viewport. Fondo `--color-bg` o `--color-surface` opaco.
+  No se ve el catálogo detrás.
+- **Cabecera del overlay:** logo + icono X para cerrar.
+- **Cuerpo del overlay:** items del menú en vertical, alineados a la
+  izquierda. Tipografía en `--text-lg` (18 px) o superior, con
+  espaciado generoso entre items (mínimo 16 px vertical).
+- **Item activo:** en `--color-accent-text`, con peso 600.
+- **Pie del overlay:** accesos a cuenta, carrito, y buscador si
+  existe. Alineados a la izquierda, tamaño reducido.
+- **Scroll lock:** mientras está abierto, el fondo no scrollea.
+- **Focus trap:** el foco entra en el overlay al abrir y no sale hasta
+  cerrarlo.
+- **Cierres:** X, Esc, elegir un enlace. Con JS. Sin JS, el mismo
+  patrón que el drawer de filtros (hash + `:target`).
+
+### Prohibido
+
+- Desplegar el menú como dropdown bajo la cabecera. Rompe la
+  convención, desperdicia el alto del viewport, y deja ver el
+  contenido detrás.
+- Menú horizontal en móvil (los items no caben).
+- Cerrar el menú con click fuera. En overlay a pantalla completa no
+  aplica: no hay "fuera".
+
+### Icono del menú
+
+Es un `<a href="#menu-movil">`, no un `<button>`. Funciona sin JS por
+CSS `:target`. Con JS, un hook cliente (`useHashOverlay`) sincroniza
+el estado.
+
+Icono: `Menu` de lucide. Si el estado es abierto, se sustituye por `X`
+(o el overlay tiene su propia X en la cabecera).
+
+## Controles de formulario
+
+### `<select>`
+
+Siempre con chevron custom. El nativo del navegador no se usa: tiene
+posición distinta entre Chrome, Safari y Firefox, no respeta el
+padding, y no usa los tokens del estilo.
+
+Implementación:
+
+    <div class="relative inline-block">
+      <select class="appearance-none pr-10 ...">...</select>
+      <ChevronDown class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+    </div>
+
+- `appearance: none` en el select.
+- Padding derecho suficiente para que el texto no choque con el icono.
+- Icono `ChevronDown` de lucide, `pointer-events: none` para no
+  bloquear clics.
+- Alineación vertical centrada.
+
+### `<input>`
+
+- `--radius-control` (píldora) para campos de texto y números.
+- Altura consistente con `--control-height`.
+- Foco visible (outline del estilo).
+- Ningún input nativo sin estilizar.
+
+### `<checkbox>` y `<radio>`
+
+- Personalizados con el color `--color-accent` cuando están marcados.
+- Nunca el nativo del navegador.
+- Los `radio` con apariencia de chip (píldora) cuando representan
+  filtros de talla, color, categoría.
+
 ## Layout
 
 - Mobile-first. Contenedor `--layout-container`, margen `--layout-gutter`.
@@ -91,6 +212,31 @@ saturado para las acciones.
 - Sombras con color de marca.
 - Paleta copiada de `examples/` sin pasar por el proceso de deducción.
 
+## Responsive
+
+Mobile-first. El layout base es de una columna; el escritorio amplía.
+
+- **Rejilla de productos:** 2 columnas hasta `--bp-md`; 3 a partir de
+  `--bp-md`; 4 a partir de `--bp-lg`.
+- **Cabecera:** en móvil se reduce a logo + dos iconos (búsqueda y
+  carrito). Los enlaces de navegación se pliegan en un menú lateral o en
+  un drawer. En escritorio se muestran todos los enlaces en horizontal.
+- **Barra de pestañas inferior:** solo en móvil (`< --bp-md`). En
+  escritorio se oculta; la navegación pasa a la cabecera.
+- **Banner hero:** en móvil la imagen va arriba y el texto abajo, en
+  columna. En escritorio, el texto a la izquierda y el producto a la
+  derecha. El CTA siempre visible sin hacer scroll.
+- **Ficha de producto:** en móvil, imagen arriba y barra inferior fija
+  con el CTA. En escritorio, dos columnas: imagen a la izquierda,
+  información a la derecha.
+- **Fila de carrito:** en móvil, cada artículo ocupa el ancho completo
+  en dos líneas (miniatura + datos arriba, precio + stepper abajo). En
+  escritorio, una sola fila.
+- **Controles táctiles:** en móvil, ≥ 44×44 px. En escritorio pueden
+  reducirse a 36×36 px, pero nunca por debajo de 32×32.
+- **Tipografía display:** los tokens usan `clamp()`. El titular del
+  banner no baja de `--text-display` mínimo.
+
 ## Criterios de aceptación del estilo
 
 | ID | Criterio | Verificación |
@@ -120,6 +266,21 @@ saturado para las acciones.
 4. Una versión `aprobada` no se edita: un cambio crea 0.x nueva con ADR.
 
 ## Cambios
+
+### 0.5.0 — 2026-10-16
+- Nueva sección "Menú móvil": overlay a pantalla completa en móvil,
+  no dropdown. Icono como `<a href="#menu-movil">` con fallback sin JS.
+- Nueva sección "Controles de formulario": chevron custom en
+  `<select>`, inputs y checkbox/radio estilizados.
+- Motivación: Trama construyó un menú dropdown que rompía la
+  convención, y un `<select>` con chevron nativo desalineado. A partir
+  de ahora está documentado.
+
+### 0.4.0 — 2026-10-16
+- Añadida sección "Filtros y búsqueda" con la convención del sector
+  (columna lateral en escritorio, drawer en móvil).
+- Motivación: el proyecto Trama colocó los filtros encima del catálogo,
+  rompiendo la convención. A partir de ahora está documentado.
 
 ### 0.3.0 — 2026-10-10
 - Administrativo. La regla de paleta se generaliza a `design/palette-rules.md`. Este estilo pasa a ser un stub que apunta al general.
