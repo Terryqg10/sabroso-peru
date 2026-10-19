@@ -13,7 +13,7 @@ export default function GaleriaPage() {
     <main className="px-gutter py-12">
       <Link
         href="/"
-        className="inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-caps text-accent-text underline"
+        className="inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-caps text-accent-text transition-opacity hover:opacity-80"
       >
         Volver al inicio
       </Link>

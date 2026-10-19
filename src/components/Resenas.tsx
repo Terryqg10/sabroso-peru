@@ -27,7 +27,7 @@ export function Resenas({ resenas }: { resenas: readonly Resena[] }) {
                   href={r.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-11 items-center font-semibold text-accent-text underline"
+                  className="inline-flex min-h-11 items-center font-semibold text-accent-text transition-opacity hover:opacity-80"
                 >
                   Ver reseña de {r.autor} en {r.fuente}
                 </a>

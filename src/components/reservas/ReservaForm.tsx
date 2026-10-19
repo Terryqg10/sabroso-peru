@@ -177,7 +177,7 @@ export function ReservaForm() {
           ¿Prefieres llamar o no tienes WhatsApp? Llámanos al{' '}
           <a
             href={`tel:${restaurante.telefono.replace(/\s/g, '')}`}
-            className="inline-flex min-h-11 items-center gap-2 font-semibold text-accent-text underline"
+            className="inline-flex min-h-11 items-center gap-2 font-semibold text-accent-text transition-opacity hover:opacity-80"
           >
             <Phone aria-hidden="true" className="size-4" />
             {restaurante.telefono}

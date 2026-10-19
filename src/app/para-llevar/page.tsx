@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const MENSAJE = 'Hola, quisiera hacer un pedido para llevar.';
-const claseEnlace = 'inline-flex min-h-11 items-center font-semibold text-accent-text underline';
+const claseEnlace = 'inline-flex min-h-11 items-center font-semibold text-accent-text transition-opacity hover:opacity-80';
 const claseBoton =
   'inline-flex min-h-11 items-center justify-center px-6 text-label font-bold uppercase tracking-caps';
 
@@ -30,7 +30,7 @@ export default function ParaLlevarPage() {
       <div className="max-w-prose-token md:col-span-2">
         <Link
           href="/"
-          className="inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-caps text-accent-text underline"
+          className="inline-flex min-h-11 items-center text-label font-semibold uppercase tracking-caps text-accent-text transition-opacity hover:opacity-80"
         >
           Volver al inicio
         </Link>

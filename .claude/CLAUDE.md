@@ -32,14 +32,17 @@ Detalle en `.claude/rules/constitution.md`.
 Antes de crear o modificar cualquier UI:
 
 1. Lee `design/styles/index.md`.
-2. Pregunta al usuario con qué estilo empezar. La primera opción es el
-   estilo actual (`style: vX@versión` en `sdd/plans/`), marcada
-   "(actual)". Incluye siempre "Nueva exploración".
-3. Confirma que el proyecto tiene un `palette.css` válido. Si no, aplica
+2. Comprueba si la tarea es una continuación lógica del estilo actual
+   (ej. un componente de la tienda en un proyecto v1). Si lo es,
+   asume el estilo actual y procede.
+3. Si es un panel de administración, una exploración o el proyecto no
+   tiene estilo, entonces SÍ debes preguntar al usuario con qué
+   estilo trabajar (ver rules/styles.md).
+4. Confirma que el proyecto tiene un `palette.css` válido. Si no, aplica
    `design/styles/vX-…/palette-rules.md` antes.
-4. Usa solo nombres de token. Prohibido hex, rgb() o valores arbitrarios
+5. Usa solo nombres de token. Prohibido hex, rgb() o valores arbitrarios
    en componentes.
-5. Responsive: antes de cerrar cualquier tarea de UI, comprueba que
+6. Responsive: antes de cerrar cualquier tarea de UI, comprueba que
    funciona en todo el rango de 320 a 1280 px, incluidos anchos
    intermedios (480-700 px). Sin scroll horizontal, sin elementos
    cortados, con navegación móvil definida. El test
