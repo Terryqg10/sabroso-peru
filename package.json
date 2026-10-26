@@ -31,7 +31,7 @@
     "optimize-images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
-    "lucide-react": "^0.460.0",
+    "lucide-react": "^0.577.0",
     "motion": "^12.0.0",
     "next": "^16.0.0",
     "react": "^19.0.0",
